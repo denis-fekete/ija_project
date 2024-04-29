@@ -68,6 +68,9 @@ public class Simulator extends AnimationTimer {
      */
     Obstacle activeObstacle;
 
+    /**
+     * Pointer to the Pane where objects will get stored
+     */
     Pane root;
     public Simulator(Pane root, int width, int height)
     {
@@ -166,5 +169,9 @@ public class Simulator extends AnimationTimer {
 
     public ArrayList<BaseRobot> getRobots() {
         return robots;
+    }
+
+    public Pane getRoot() {
+        return root;
     }
 }

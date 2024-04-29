@@ -64,7 +64,7 @@
             <!-- Default configuration for running with: mvn clean javafx:run -->
             <id>default-cli</id>
             <configuration>
-              <mainClass>ija.ija2023.ija_project/ija.ija2023.ija_project.HelloApplication</mainClass>
+              <mainClass>ija.ija2023.ija_project/ija.ija2023.ija_project.Main</mainClass>
               <launcher>app</launcher>
               <jlinkZipName>app</jlinkZipName>
               <jlinkImageName>app</jlinkImageName>
