@@ -2,20 +2,41 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package ija.ija2023.ija_project.simulation;
+package ija.ija2023.ija_project.SimulationLib2D;
 
 /**
  *
  * @author Diony
  */
 public class Circle extends Point{
+    /**
+     * Rotation of this Circle
+     */
     protected double rot;
+
+    /**
+     * Radius of this Circle
+     */
     protected double radius;
-    
+
+    /**
+     * Stored cosine value for better performance (less cos() function calls)
+     */
     protected double cosRad;
+
+    /**
+     * Stored sine value for better performance (less cos() function calls)
+     */
     protected double sinRad;
     
-    
+
+    /**
+     * Circle constructor
+     * @param x Center x position of the Circle
+     * @param y Center y position of the Circle
+     * @param radius Radius of the Circle
+     * @param rot Rotation angle of the circle
+     */
     public Circle()
     {
         super(0, 0);
@@ -31,8 +52,8 @@ public class Circle extends Point{
     }
     
     /**
-    * Changes circle center point at position specified by Point
-    * @param point 
+    * Changes circle center point to the position specified by Point
+    * @param point New center of this circle
     */
     public Point moveTo(Point point)
     {
@@ -73,10 +94,9 @@ public class Circle extends Point{
     {
         double xDelta = cosRad * distance;
         double yDelta = sinRad * distance;
-        
-        this.x += xDelta;
-        this.y += yDelta;
-        
+
+        this.setPos(xDelta, yDelta);
+
         return this;
     }
     
@@ -142,37 +162,11 @@ public class Circle extends Point{
     /**
      * Sets  value of circle rotation
      * @param rot new value to be set
-     * @return 
+     * @return
      */
     public Point setRotation(double rot)
     {
         this.rot = rot;
         return this;
-    }
-
-    static boolean intersect(Circle a, Circle b)
-    {
-        return Circle.intersect(a.getPos(), a.getRadius(), b.getPos(), b.getRadius());
-    }
-    
-    
-    static boolean intersect(Point aCenter, double aRadius, 
-            Point bCenter, double bRadius)
-    {
-        final double radius = aRadius + bRadius;
-
-        // Check if delta on X-axis between objects is less than detection 
-        // radius + radius of other object
-        if((aCenter.x - bCenter.x) * (aCenter.x - bCenter.x) <= radius * radius)
-        {
-            // Check if delta on Y-axis between objects is less than detection 
-            // radius + radius of other object
-            if((aCenter.y - bCenter.y) * (aCenter.y - bCenter.y) <= radius * radius)
-            {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

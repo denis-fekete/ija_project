@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package ija.ija2023.ija_project.simulation;
+package ija.ija2023.ija_project.SimulationLib2D;
 /**
  *
  * @author Diony
