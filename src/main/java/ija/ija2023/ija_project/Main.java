@@ -14,18 +14,19 @@ import javafx.scene.layout.*;
 import ija.ija2023.ija_project.JavaSpecific.Simulator;
 
 public class Main extends Application {
-    public int windowWidth = 600;
-    public int windowHeight = 400;
-
+    /**
+     * Simulator holding information about and object for simulation collisions
+     */
     private Simulator simulator;
 
+    /**
+     * Pane of the scene, holding all objects, GUI, Robots, etc...
+     */
     Pane root;
 
     @Override
     public void start(Stage stage) throws IOException {
-        // create needed objects
-        Pane root = new Pane();
-        simulator = new Simulator(root, windowWidth, windowHeight);
+        root = new Pane(); // pane storing all contents
 
         // load fxmlLoader
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("scene.fxml"));
@@ -35,9 +36,21 @@ public class Main extends Application {
 
         // add controller set simulator reference into an controller
         Controller controller = fxmlLoader.getController();
+
+        // create new simulation with scroll pane from FXML
+        simulator = new Simulator(1000, 1000, controller.getSimulationPane());
+        // add simulator to controller for calling of Simulator interface methods
         controller.setSimulator(simulator);
 
-        Scene scene = new Scene(root, 640, 420);
+        // add scroll pane to the root
+        root.getChildren().add(simulator.getScrollPane());
+        // set scroll pane to be movable by user
+        simulator.getScrollPane().setPannable(true);
+
+        simulator.start();
+
+        // create new scene and put contents of the root into it
+        Scene scene = new Scene(root);
 
         stage.setTitle("IJA Project - 2D Collision Simulator");
         stage.setScene(scene);

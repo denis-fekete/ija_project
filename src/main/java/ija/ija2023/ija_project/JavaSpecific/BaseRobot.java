@@ -1,9 +1,11 @@
 package ija.ija2023.ija_project.JavaSpecific;
 
+import ija.ija2023.ija_project.SimulationLib2D.Point;
 import ija.ija2023.ija_project.SimulationLib2D.Rect;
 import ija.ija2023.ija_project.SimulationLib2D.Robot;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.StrokeType;
 
 import java.util.ArrayList;
 
@@ -12,9 +14,12 @@ public class BaseRobot extends javafx.scene.shape.Circle {
     /**
      * Robot object for simulation
      */
-     Robot sim;
+    Robot sim;
 
-     Rectangle colliderRect;
+    /**
+     * Graphical representation of collider
+     */
+    Rectangle colliderRect;
 
     /**
      * Color of this robot
@@ -59,26 +64,26 @@ public class BaseRobot extends javafx.scene.shape.Circle {
 
     /**
      * Constructor of BaseRobot object
-     * @param x Center X position to be set
-     * @param y Center Y position to be set
-     * @param radius Radius if this Robot
-     * @param rot Rotation of this robot
-     * @param detRadius Detection radius of this robot
-     * @param color Color of the AutoRobot
-     * @param speed Speed of the AutoRobot
-     * @param turnAngle Turn angle on collision detection
-     * @param turnDirection Turn direction, -1 or 1
-     * @param obstacles Pointer to the vector of obstacles
+     *
+     * @param x              Center X position to be set
+     * @param y              Center Y position to be set
+     * @param radius         Radius if this Robot
+     * @param rot            Rotation of this robot
+     * @param detRadius      Detection radius of this robot
+     * @param color          Color of the AutoRobot
+     * @param speed          Speed of the AutoRobot
+     * @param turnAngle      Turn angle on collision detection
+     * @param turnDirection  Turn direction, -1 or 1
+     * @param obstacles      Pointer to the vector of obstacles
      * @param robotColliders Pointer to the vector of all robots
-     * @param simulator Pointer to the simulator
+     * @param simulator      Pointer to the simulator
      */
-    public BaseRobot( double x, double y, double radius, double rot,
-            double detRadius, Color color, double speed,
-            double turnAngle, int turnDirection,
-            ArrayList<Rect> obstacles,
-            ArrayList<Robot> robotColliders,
-            Simulator simulator)
-    {
+    public BaseRobot(double x, double y, double radius, double rot,
+                     double detRadius, Color color, double speed,
+                     double turnAngle, int turnDirection,
+                     ArrayList<Rect> obstacles,
+                     ArrayList<Robot> robotColliders,
+                     Simulator simulator) {
         super(x, y, radius, color);
 
         this.sim = Robot.create(x, y, radius, rot, detRadius);
@@ -89,11 +94,48 @@ public class BaseRobot extends javafx.scene.shape.Circle {
         this.colliders = obstacles;
         this.robotColliders = robotColliders;
         this.simulator = simulator;
-        this.highlightedColor = Color.color(Math.min(color.getRed() + 0.11, 0.93),
-                                            Math.min(color.getBlue() + 0.11, 0.93),
-                                            Math.min(color.getGreen() + 0.11, 0.93));
+        this.highlightedColor = Color.color(Math.min(color.getRed() + 0.15, 0.93),
+                Math.min(color.getBlue() + 0.15, 0.93),
+                Math.min(color.getGreen() + 0.15, 0.93));
     }
 
+    public void initialize()
+    {
+        // initialize collider
+        this.colliderRect = new Rectangle(   sim.colliderFwd.getX(),
+                                        sim.colliderFwd.getY(),
+                                        sim.colliderFwd.getWidth(),
+                                        sim.colliderFwd.getHeight());
+        colliderRect.setFill(null);
+        colliderRect.setStroke(color);
+        colliderRect.setStrokeWidth(1);
+
+        // initialize and correct position and rotation
+        this.rotateRobot(0);
+        this.moveRobotTo(sim.getPos());
+
+        // set stroke to be from inside
+        this.setStrokeType(StrokeType.INSIDE);
+        this.unselectRobot();
+
+        this.setOnMouseClicked(mouseEvent -> {
+            this.simulator.setActiveRobot(this);
+        });
+
+        this.setOnMouseDragged(mouseEvent -> {
+            if(simulator.isPaused())
+            {
+                // Get the scene coordinates of the mouse event
+                double sceneX = mouseEvent.getSceneX();
+                double sceneY = mouseEvent.getSceneY();
+
+                // Convert scene coordinates to coordinates relative to the parent pane
+                javafx.geometry.Point2D cords = this.getParent().sceneToLocal(sceneX, sceneY);
+
+                this.moveRobotTo(new Point(cords.getX(), cords.getY()));
+            }
+        });
+    }
 
     public void rotateRobot(double angle)
     {
@@ -104,6 +146,17 @@ public class BaseRobot extends javafx.scene.shape.Circle {
     public void moveRobot(double distance)
     {
         sim.moveForward(distance);
+    }
+
+    public void moveRobotTo(Point p)
+    {
+        sim.moveTo(p);
+        this.setCenterX(sim.getX());
+        this.setCenterY(sim.getY());
+
+        this.colliderRect.setRotate(sim.getRotation());
+        this.colliderRect.setX(sim.colliderFwd.getX() - sim.colliderFwd.getWidth() / 2);
+        this.colliderRect.setY(sim.colliderFwd.getY() - sim.colliderFwd.getHeight() / 2);
     }
 
     /**
@@ -118,7 +171,7 @@ public class BaseRobot extends javafx.scene.shape.Circle {
     public void selectRobot()
     {
         this.setStroke(highlightedColor);
-        this.setStrokeWidth(2);
+        this.setStrokeWidth(5);
     }
 
     public void unselectRobot()

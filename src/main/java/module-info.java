@@ -6,4 +6,5 @@ module ija.ija2023.ija_project {
     opens ija.ija2023.ija_project to javafx.fxml;
     exports ija.ija2023.ija_project;
     exports ija.ija2023.ija_project.JavaSpecific;
+    exports ija.ija2023.ija_project.SimulationLib2D;
 }
