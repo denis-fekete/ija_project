@@ -39,12 +39,12 @@ public class Simulator extends AnimationTimer {
     /**
      * Width of simulation space
      */
-    int spaceWidth;
+    double spaceWidth;
 
     /**
      * Height of simulation space
      */
-    int spaceHeight;
+    double spaceHeight;
 
     /**
      * Value of when was simulator last called
@@ -80,7 +80,7 @@ public class Simulator extends AnimationTimer {
      * Boolean value telling if the Simulator is pause or not
      */
     boolean running;
-    public Simulator(int width, int height, ScrollPane scrollPane, Controller controller)
+    public Simulator(ScrollPane scrollPane, Controller controller)
     {
         obstacles = new ArrayList<Obstacle>();
         colliders = new ArrayList<Rect>();
@@ -98,8 +98,6 @@ public class Simulator extends AnimationTimer {
         this.guiController = controller;
 
         lastUpdate = 0;
-        this.spaceWidth = width;
-        this.spaceHeight = height;
 
         running = false;
     }
@@ -264,5 +262,19 @@ public class Simulator extends AnimationTimer {
         }
 
         return  null;
+    }
+
+    public void setSize(double width, double height)
+    {
+        this.spaceWidth = width;
+        this.spaceHeight = height;
+    }
+
+    public double getSpaceWidth() {
+        return spaceWidth;
+    }
+
+    public double getSpaceHeight() {
+        return spaceHeight;
     }
 }

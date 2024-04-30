@@ -39,7 +39,7 @@ public class AutoRobot extends BaseRobot {
 
     public void simulate(double deltaTime)
     {
-        if(sim.obstacleDetection(colliders) || sim.robotDetection(robotColliders))
+        if(sim.obstacleDetection(colliders) || sim.robotDetection(robotColliders) || isOutside())
         {
             rotateRobot(turnSpeed * turnDirection * deltaTime);
         }

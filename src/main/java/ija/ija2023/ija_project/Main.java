@@ -39,9 +39,11 @@ public class Main extends Application {
         Controller controller = fxmlLoader.getController();
 
         // create new simulation with scroll pane from FXML
-        simulator = new Simulator(1000, 1000, controller.getSimulationPane(), controller);
+        simulator = new Simulator(controller.getSimulationPane(), controller);
         // add simulator to controller for calling of Simulator interface methods
         controller.setSimulator(simulator);
+        // apply default world size restrictions
+        controller.world_apply_world_border();
 
         // add scroll pane to the root
         root.getChildren().add(simulator.getScrollPane());

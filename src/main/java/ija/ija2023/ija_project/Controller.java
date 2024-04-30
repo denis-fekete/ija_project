@@ -100,6 +100,13 @@ public class Controller implements Initializable {
     @FXML // fx:id="robotmove_speedslider"
     private Slider robotmove_speedslider; // Value injected by FXMLLoader
 
+    @FXML // fx:id="world_size_x"
+    private Spinner<Double> world_size_x; // Value injected by FXMLLoader
+
+    @FXML // fx:id="world_size_y"
+    private Spinner<Double> world_size_y; // Value injected by FXMLLoader
+
+
     // ------------------------------------------------------------------------
 
     @Override
@@ -107,6 +114,7 @@ public class Controller implements Initializable {
         setRobotCreatorDefaultValues();
         setObstacleCreatorDefaultValues();
         setRobotMoveDefaultValues();
+        setWorldDefaultValues();
     }
 
     private void setRobotCreatorDefaultValues()
@@ -149,6 +157,14 @@ public class Controller implements Initializable {
         robotmove_rotation_speed.getValueFactory().setValue(45.0);
     }
 
+    private  void setWorldDefaultValues()
+    {
+        // default windows size should be 800, 600 to be
+        // correctly displayed even on older machines
+        world_size_x.getValueFactory().setValue(800.0 - 240);
+        world_size_y.getValueFactory().setValue(600.0);
+    }
+
     public void setSimulator(Simulator simulator) {
         this.simulator = simulator;
     }
@@ -159,16 +175,16 @@ public class Controller implements Initializable {
 
     public void resizeContents(Number width, Number height)
     {
-        final int ADJUST = 5;
         if(width != null)
         {
-            simulationSpace.setPrefWidth(width.doubleValue() - controlMenu.getPrefWidth() - ADJUST);
+            simulationSpace.setPrefWidth(width.doubleValue() - controlMenu.getPrefWidth());
         }
 
         if(height != null)
         {
-            controlMenu.setPrefHeight(height.doubleValue() - timeMenu.getPrefHeight() - (3 * 25));
-            simulationSpace.setPrefHeight(height.doubleValue() - ADJUST);
+            // 3*20 is size of collapsed panes in menu bar
+            controlMenu.setPrefHeight(height.doubleValue() - timeMenu.getPrefHeight()  - (3*13));
+            simulationSpace.setPrefHeight(height.doubleValue());
         }
     }
 
@@ -359,4 +375,13 @@ public class Controller implements Initializable {
         robotmove_speedslider.setMax(robotmove_speedmax.getValue());
     }
 
+    // ------------------------------------------------------------------------
+
+    @FXML
+    public void world_apply_world_border()
+    {
+        simulator.setSize(world_size_x.getValue(), world_size_y.getValue());
+        simulationSpace.setPrefWidth(world_size_x.getValue());
+        simulationSpace.setPrefHeight(world_size_y.getValue());
+    }
 }

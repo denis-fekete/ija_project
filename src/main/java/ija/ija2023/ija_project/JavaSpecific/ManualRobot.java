@@ -69,7 +69,7 @@ public class ManualRobot extends BaseRobot {
 
         if(speed > 0)
         {
-            if(!sim.obstacleDetection(colliders) && !sim.robotDetection(robotColliders))
+            if(!sim.obstacleDetection(colliders) && !sim.robotDetection(robotColliders) && !isOutside())
             {
                 moveRobot(speed * deltaTime);
             }

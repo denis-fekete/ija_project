@@ -212,5 +212,16 @@ public class BaseRobot extends javafx.scene.shape.Circle {
         this.turnSpeed = turnSpeed;
     }
 
+    public boolean isOutside()
+    {
+        return (sim.colliderFwd.getRB().getX() > simulator.getSpaceWidth() ||
+                sim.colliderFwd.getRB().getY() > simulator.getSpaceHeight() ||
+                sim.colliderFwd.getRT().getX() > simulator.getSpaceWidth() ||
+                sim.colliderFwd.getRT().getY() > simulator.getSpaceHeight() ||
 
+                sim.colliderFwd.getRB().getX() < 0 ||
+                sim.colliderFwd.getRB().getY() < 0 ||
+                sim.colliderFwd.getRT().getX() < 0 ||
+                sim.colliderFwd.getRT().getY() < 0);
+    }
 }
