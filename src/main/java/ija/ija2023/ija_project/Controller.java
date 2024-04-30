@@ -1,15 +1,14 @@
 package ija.ija2023.ija_project;
 
+import ija.ija2023.ija_project.JavaSpecific.ManualRobot;
 import  ija.ija2023.ija_project.JavaSpecific.Simulator;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.event.ActionEvent;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.Spinner;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -17,8 +16,16 @@ import java.util.ResourceBundle;
 public class Controller implements Initializable {
     Simulator simulator;
 
+    @FXML
+    private HBox timeMenu;
+
+    @FXML // fx:id="controlMenu"
+    private Accordion controlMenu;
+
     @FXML // fx:id="simulationSpace"
     private ScrollPane simulationSpace; // Value injected by FXMLLoader
+
+    // ------------------------------------------------------------------------
 
     @FXML // fx:id="obstaclecreator_btn_create"
     private Button obstaclecreator_btn_create; // Value injected by FXMLLoader
@@ -41,8 +48,7 @@ public class Controller implements Initializable {
     @FXML // fx:id="obstaclecreator_y_pos"
     private Spinner<Double> obstaclecreator_y_pos; // Value injected by FXMLLoader
 
-    @FXML // fx:id="robotcreator_btn_create"
-    private Button robotcreator_btn_create; // Value injected by FXMLLoader
+    // ------------------------------------------------------------------------
 
     @FXML // fx:id="robotcreator_color"
     private ColorPicker robotcreator_color; // Value injected by FXMLLoader
@@ -74,10 +80,33 @@ public class Controller implements Initializable {
     @FXML // fx:id="robotcreator_y_pos"
     private Spinner<Double> robotcreator_y_pos; // Value injected by FXMLLoader
 
+    // ------------------------------------------------------------------------
+
+    @FXML // fx:id="robotmove_desired_angle"
+    private Slider robotmove_desired_angle; // Value injected by FXMLLoader
+
+    @FXML // fx:id="robotmove_spin_anticlockwise"
+    private ToggleButton robotmove_spin_anticlockwise; // Value injected by FXMLLoader
+
+    @FXML // fx:id="robotmove_spin_clockwise"
+    private ToggleButton robotmove_spin_clockwise; // Value injected by FXMLLoader
+
+    @FXML // fx:id="robotmove_rotation_speed"
+    private Spinner<Double> robotmove_rotation_speed; // Value injected by FXMLLoader
+
+    @FXML // fx:id="robotmove_speedmax"
+    private Spinner<Double> robotmove_speedmax; // Value injected by FXMLLoader
+
+    @FXML // fx:id="robotmove_speedslider"
+    private Slider robotmove_speedslider; // Value injected by FXMLLoader
+
+    // ------------------------------------------------------------------------
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setRobotCreatorDefaultValues();
         setObstacleCreatorDefaultValues();
+        setRobotMoveDefaultValues();
     }
 
     private void setRobotCreatorDefaultValues()
@@ -97,7 +126,7 @@ public class Controller implements Initializable {
         robotcreator_detection_radius.getValueFactory().setValue(50.0);
 
         robotcreator_rotation.getValueFactory().setValue(0.0);
-        robotcreator_rot_speed.getValueFactory().setValue(15.0);
+        robotcreator_rot_speed.getValueFactory().setValue(30.0);
     }
 
     private void setObstacleCreatorDefaultValues()
@@ -111,7 +140,14 @@ public class Controller implements Initializable {
         obstaclecreator_rotation.getValueFactory().setValue(0.0);
     }
 
-
+    private void setRobotMoveDefaultValues()
+    {
+        robotmove_speedmax.getValueFactory().setValue(50.0);
+        robotmove_rotation_speed.getValueFactory().setValue(45.0);
+        robotmove_speedslider.setValue(0);
+        robotmove_desired_angle.setValue(0);
+        robotmove_rotation_speed.getValueFactory().setValue(45.0);
+    }
 
     public void setSimulator(Simulator simulator) {
         this.simulator = simulator;
@@ -121,17 +157,22 @@ public class Controller implements Initializable {
         return simulationSpace;
     }
 
-    @FXML
-    void btn_addObstacle(ActionEvent event) {
-        simulator.addObstacle(
-                obstaclecreator_x_pos.getValue(),
-                obstaclecreator_y_pos.getValue(),
-                obstaclecreator_width.getValue(),
-                obstaclecreator_height.getValue(),
-                obstaclecreator_rotation.getValue(),
-                obstaclecreator_color.getValue()
-        );
+    public void resizeContents(Number width, Number height)
+    {
+        final int ADJUST = 5;
+        if(width != null)
+        {
+            simulationSpace.setPrefWidth(width.doubleValue() - controlMenu.getPrefWidth() - ADJUST);
+        }
+
+        if(height != null)
+        {
+            controlMenu.setPrefHeight(height.doubleValue() - timeMenu.getPrefHeight() - (3 * 25));
+            simulationSpace.setPrefHeight(height.doubleValue() - ADJUST);
+        }
     }
+
+    // ------------------------------------------------------------------------
 
     @FXML
     void btn_addRobot(ActionEvent event) {
@@ -142,7 +183,8 @@ public class Controller implements Initializable {
             turnDirection = -1;
         }
 
-        if (robotcreator_type.getValue().equals("Automatic")) {
+        if (robotcreator_type.getValue().equals("Automatic"))
+        {
             simulator.addAutomaticRobot(
                     robotcreator_x_pos.getValue(),
                     robotcreator_y_pos.getValue(),
@@ -154,7 +196,24 @@ public class Controller implements Initializable {
                     robotcreator_rot_speed.getValue(),
                     turnDirection);
         }
+        else
+        {
+            simulator.addManualRobot( robotcreator_x_pos.getValue(),
+                    robotcreator_y_pos.getValue(),
+                    robotcreator_radius.getValue(),
+                    robotcreator_rotation.getValue(),
+                    robotcreator_detection_radius.getValue(),
+                    robotcreator_color.getValue());
+        }
     }
+
+    @FXML
+    void btn_deleteRobot()
+    {
+        simulator.deleteRobot();
+    }
+
+    // ------------------------------------------------------------------------
 
     @FXML
     void btn_revertSimulation()
@@ -174,10 +233,18 @@ public class Controller implements Initializable {
         simulator.resumeSimulation();
     }
 
+    // ------------------------------------------------------------------------
+
     @FXML
-    void btn_deleteRobot()
-    {
-        simulator.deleteRobot();
+    void btn_addObstacle(ActionEvent event) {
+        simulator.addObstacle(
+                obstaclecreator_x_pos.getValue(),
+                obstaclecreator_y_pos.getValue(),
+                obstaclecreator_width.getValue(),
+                obstaclecreator_height.getValue(),
+                obstaclecreator_rotation.getValue(),
+                obstaclecreator_color.getValue()
+        );
     }
 
     @FXML
@@ -185,4 +252,111 @@ public class Controller implements Initializable {
     {
         simulator.deleteObstacle();
     }
+
+    // ------------------------------------------------------------------------
+
+    public void setManualRobotParams(ManualRobot robot)
+    {
+        robotmove_speedslider.setValue(robot.getSpeed());
+        robotmove_desired_angle.setValue(robot.getDesiredAngle());
+
+        // if robot doesn't have turn speed, copy current, else set value that the robot has
+        if(robot.getTurnSpeed() == 0)
+        {
+            robot.setTurnSpeed(robotmove_rotation_speed.getValue());
+        }
+        else
+        {
+            robotmove_rotation_speed.getValueFactory().setValue(robot.getTurnSpeed());
+        }
+
+        robotmove_spin_clockwise.setSelected(robot.isSpinClockwise());
+        robotmove_spin_anticlockwise.setSelected(robot.isSpinAnticlockwise());
+    }
+
+    @FXML
+    void robotmove_angle_changed() {
+        ManualRobot robot =  simulator.getActiveManualRobot();
+        if(robot == null)
+        {
+            return;
+        }
+
+        robot.setDesiredAngle(robotmove_desired_angle.getValue());
+    }
+
+    @FXML
+    void robotmove_btn_spin_clockwise(ActionEvent event) {
+        ManualRobot robot = simulator.getActiveManualRobot();
+        if(robot == null)
+        {
+            robotmove_spin_anticlockwise.setSelected(false);
+            robotmove_spin_clockwise.setSelected(false);
+            return;
+        }
+
+        if(robotmove_spin_clockwise.isSelected())
+        {
+            robotmove_spin_anticlockwise.setSelected(false);
+            robot.setSpinAnticlockwise(false);
+            robot.setSpinClockwise(true);
+        }
+        else
+        {
+            robot.setSpinClockwise(false);
+            robot.setDesiredAngle(robot.getSim().getRotation());
+        }
+    }
+
+    @FXML
+    void robotmove_btn_spin_anticlockwise(ActionEvent event) {
+        ManualRobot robot = simulator.getActiveManualRobot();
+        if(robot == null)
+        {
+            robotmove_spin_anticlockwise.setSelected(false);
+            robotmove_spin_clockwise.setSelected(false);
+            return;
+        }
+
+        if(robotmove_spin_anticlockwise.isSelected())
+        {
+            robotmove_spin_clockwise.setSelected(false);
+            robot.setSpinAnticlockwise(true);
+            robot.setSpinClockwise(false);
+        }
+        else
+        {
+            robot.setSpinAnticlockwise(false);
+            robot.setDesiredAngle(robot.getSim().getRotation());
+        }
+
+    }
+
+    @FXML
+    void robotmove_rot_speed_changed() {
+        ManualRobot robot = simulator.getActiveManualRobot();
+        if(robot == null)
+        {
+            return;
+        }
+
+        robot.setTurnSpeed(robotmove_rotation_speed.getValue());
+    }
+
+    @FXML
+    void robotmove_speed_changed() {
+        ManualRobot robot = simulator.getActiveManualRobot();
+        if(robot == null)
+        {
+            return;
+        }
+
+        robot.setSpeed(robotmove_speedslider.getValue());
+    }
+
+    @FXML
+    void robotmove_max_speed_changed() {
+        robotmove_speedslider.setMax(robotmove_speedmax.getValue());
+    }
+
 }

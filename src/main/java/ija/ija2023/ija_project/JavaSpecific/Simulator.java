@@ -1,6 +1,8 @@
 package ija.ija2023.ija_project.JavaSpecific;
 
 import java.util.ArrayList;
+
+import ija.ija2023.ija_project.Controller;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ScrollPane;
@@ -70,10 +72,15 @@ public class Simulator extends AnimationTimer {
     ScrollPane scrollPane;
 
     /**
+     *
+     */
+    Controller guiController;
+
+    /**
      * Boolean value telling if the Simulator is pause or not
      */
     boolean running;
-    public Simulator(int width, int height, ScrollPane scrollPane)
+    public Simulator(int width, int height, ScrollPane scrollPane, Controller controller)
     {
         obstacles = new ArrayList<Obstacle>();
         colliders = new ArrayList<Rect>();
@@ -88,6 +95,7 @@ public class Simulator extends AnimationTimer {
         this.world = new Pane();
 
         this.scrollPane = scrollPane;
+        this.guiController = controller;
 
         lastUpdate = 0;
         this.spaceWidth = width;
@@ -100,10 +108,9 @@ public class Simulator extends AnimationTimer {
     public void handle(long now) 
     {
         double deltaTime = (now - lastUpdate) / 1e9;
-        if(running)
-        {
-            simulationCycle(deltaTime);
-        }
+
+        // 0.3 is normalization in case that Simulator was just resumed
+        simulationCycle(Math.min(deltaTime, 0.3));
         lastUpdate = now;
     }
 
@@ -120,32 +127,37 @@ public class Simulator extends AnimationTimer {
                                      double turnAngle, int turnDirection)
     {
         // create new robot
-        AutoRobot newRobot = AutoRobot.create(x, y, radius, rot, detRadius, color, speed, turnAngle, turnDirection, colliders, robotColliders, this);
+        AutoRobot newRobot = AutoRobot.create(x, y, radius, rot,
+                detRadius, color, speed, turnAngle, turnDirection,
+                colliders, robotColliders, this);
+
         // add it to array of BaseRobots
         robots.add(newRobot);
         // add it to array of robot colliders
         robotColliders.add(newRobot.getSim());
-        // add new robot to the scene
 
+        // add new robot to the scene
         world.getChildren().addAll(newRobot, newRobot.colliderRect);
         scrollPane.setContent(world);
     }
 
-//    public void addManualRobot(double x, double y, double radius, double rot,
-//                                     double detRadius, Color color, double speed,
-//                                     double turnAngle, int turnDirection)
-//    {
-//        // create new robot
-//        ManualRobot newRobot = ManualRobot.create(x, y, radius, rot, detRadius, color, obstacles, robotColliders, this);
-//        // add it to array of AutoRobots
-//        autoRobots.add(newRobot);
-//        // add it to array of BaseRobots
-//        robots.add(newRobot);
-//        // add it to array of robot colliders
-//        robotColliders.add(newRobot.getSim());
-//        // add new robot to the scene
-//        root.getChildren().add(newRobot);
-//    }
+    public void addManualRobot(double x, double y, double radius, double rot,
+                                     double detRadius, Color color)
+    {
+        // create new robot, 10, 45, 1 = random default values
+        ManualRobot newRobot = ManualRobot.create(x, y, radius, rot,
+                detRadius, color, 0, 0, 0,
+                colliders, robotColliders, this);
+
+        // add it to array of BaseRobots
+        robots.add(newRobot);
+        // add it to array of robot colliders
+        robotColliders.add(newRobot.getSim());
+
+        // add new robot to the scene
+        world.getChildren().addAll(newRobot, newRobot.colliderRect);
+        scrollPane.setContent(world);
+    }
 
     public void addObstacle(double x, double y, double w, double h, double rot,
                                   Color color)
@@ -193,41 +205,42 @@ public class Simulator extends AnimationTimer {
 
     public void setActiveRobot(BaseRobot robot)
     {
+        if(activeRobot == robot)
+        {
+            return;
+        }
         if(activeRobot != null)
         {
             activeRobot.unselectRobot();
         }
 
+        if(robot instanceof  ManualRobot)
+        {
+            guiController.setManualRobotParams((ManualRobot) robot);
+        }
+
         activeRobot = robot;
         activeRobot.selectRobot();
     }
+
     public ArrayList<Obstacle> getObstacles() {
         return obstacles;
     }
 
-    public ArrayList<BaseRobot> getRobots() {
-        return robots;
-    }
+    public ArrayList<BaseRobot> getRobots() { return robots; }
 
-    public Pane getWorldPane() {
-        return world;
-    }
-
-    public ScrollPane getScrollPane()
-    {
-        return scrollPane;
-    }
+    public ScrollPane getScrollPane() { return scrollPane; }
 
     public void pauseSimulation()
     {
         running = false;
-//        this.stop();
+        this.stop();
     }
 
     public void resumeSimulation()
     {
         running = true;
-//        this.start();
+        this.start();
     }
 
     public boolean isPaused()
@@ -235,8 +248,21 @@ public class Simulator extends AnimationTimer {
         return !running;
     }
 
-    public  boolean isRunnning()
+    public boolean isRunnning()
     {
         return running;
+    }
+
+    public ManualRobot getActiveManualRobot()
+    {
+        if(activeRobot != null)
+        {
+            if(activeRobot instanceof ManualRobot)
+            {
+                return (ManualRobot) activeRobot;
+            }
+        }
+
+        return  null;
     }
 }

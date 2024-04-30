@@ -45,7 +45,7 @@ public class BaseRobot extends javafx.scene.shape.Circle {
      * Turn angle on collision detection
      */
 
-    double turnAngle;
+    double turnSpeed;
 
     /**
      * Direction in which will robot turn on collision
@@ -72,7 +72,7 @@ public class BaseRobot extends javafx.scene.shape.Circle {
      * @param detRadius      Detection radius of this robot
      * @param color          Color of the AutoRobot
      * @param speed          Speed of the AutoRobot
-     * @param turnAngle      Turn angle on collision detection
+     * @param turnSpeed      Turn angle on collision detection
      * @param turnDirection  Turn direction, -1 or 1
      * @param obstacles      Pointer to the vector of obstacles
      * @param robotColliders Pointer to the vector of all robots
@@ -80,7 +80,7 @@ public class BaseRobot extends javafx.scene.shape.Circle {
      */
     public BaseRobot(double x, double y, double radius, double rot,
                      double detRadius, Color color, double speed,
-                     double turnAngle, int turnDirection,
+                     double turnSpeed, int turnDirection,
                      ArrayList<Rect> obstacles,
                      ArrayList<Robot> robotColliders,
                      Simulator simulator) {
@@ -89,7 +89,7 @@ public class BaseRobot extends javafx.scene.shape.Circle {
         this.sim = Robot.create(x, y, radius, rot, detRadius);
         this.speed = speed;
         this.color = color;
-        this.turnAngle = turnAngle;
+        this.turnSpeed = turnSpeed;
         this.turnDirection = turnDirection;
         this.colliders = obstacles;
         this.robotColliders = robotColliders;
@@ -109,7 +109,12 @@ public class BaseRobot extends javafx.scene.shape.Circle {
         colliderRect.setFill(null);
         colliderRect.setStroke(color);
         colliderRect.setStrokeWidth(1);
+        // set viewOrder to 1, to be above default values but below obstacles
+        // nd main bodies of robots
+        colliderRect.setViewOrder(3);
 
+        // set viewOrder to 3, to be higher that collider and obstacles (2)
+        this.setViewOrder(1);
         // initialize and correct position and rotation
         this.rotateRobot(0);
         this.moveRobotTo(sim.getPos());
@@ -141,11 +146,21 @@ public class BaseRobot extends javafx.scene.shape.Circle {
     {
         sim.rotate(angle);
         this.setRotate(sim.getRotation());
+
+        this.colliderRect.setX(sim.colliderFwd.getX() - sim.colliderFwd.getWidth() / 2);
+        this.colliderRect.setY(sim.colliderFwd.getY() - sim.colliderFwd.getHeight() / 2);
+        this.colliderRect.setRotate(sim.colliderFwd.getRotation());
     }
 
     public void moveRobot(double distance)
     {
         sim.moveForward(distance);
+
+        this.setCenterX(sim.getX());
+        this.setCenterY(sim.getY());
+
+        this.colliderRect.setX(sim.colliderFwd.getX() - sim.colliderFwd.getWidth() / 2);
+        this.colliderRect.setY(sim.colliderFwd.getY() - sim.colliderFwd.getHeight() / 2);
     }
 
     public void moveRobotTo(Point p)
@@ -154,9 +169,9 @@ public class BaseRobot extends javafx.scene.shape.Circle {
         this.setCenterX(sim.getX());
         this.setCenterY(sim.getY());
 
-        this.colliderRect.setRotate(sim.getRotation());
         this.colliderRect.setX(sim.colliderFwd.getX() - sim.colliderFwd.getWidth() / 2);
         this.colliderRect.setY(sim.colliderFwd.getY() - sim.colliderFwd.getHeight() / 2);
+        this.colliderRect.setRotate(sim.getRotation());
     }
 
     /**
@@ -179,4 +194,23 @@ public class BaseRobot extends javafx.scene.shape.Circle {
         this.setStroke(color);
         this.setStrokeWidth(1);
     }
+
+    public double getSpeed()
+    {
+        return this.speed;
+    }
+
+    public void setSpeed(double speed) {
+        this.speed = speed;
+    }
+
+    public double getTurnSpeed() {
+        return turnSpeed;
+    }
+
+    public void setTurnSpeed(double turnSpeed) {
+        this.turnSpeed = turnSpeed;
+    }
+
+
 }

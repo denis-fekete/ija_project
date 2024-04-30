@@ -3,6 +3,7 @@ package ija.ija2023.ija_project;
 import java.io.IOException;
 
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -38,7 +39,7 @@ public class Main extends Application {
         Controller controller = fxmlLoader.getController();
 
         // create new simulation with scroll pane from FXML
-        simulator = new Simulator(1000, 1000, controller.getSimulationPane());
+        simulator = new Simulator(1000, 1000, controller.getSimulationPane(), controller);
         // add simulator to controller for calling of Simulator interface methods
         controller.setSimulator(simulator);
 
@@ -47,12 +48,19 @@ public class Main extends Application {
         // set scroll pane to be movable by user
         simulator.getScrollPane().setPannable(true);
 
-        simulator.start();
-
         // create new scene and put contents of the root into it
         Scene scene = new Scene(root);
 
         stage.setTitle("IJA Project - 2D Collision Simulator");
+
+        stage.widthProperty().addListener((observable, oldValue, newValue) -> {
+            controller.resizeContents(newValue, null);
+        });
+
+        stage.heightProperty().addListener((observable, oldValue, newValue) -> {
+            controller.resizeContents(null, newValue);
+        });
+
         stage.setScene(scene);
         stage.show();
     }

@@ -1,13 +1,8 @@
 package ija.ija2023.ija_project.JavaSpecific;
 
-import ija.ija2023.ija_project.SimulationLib2D.Point;
 import ija.ija2023.ija_project.SimulationLib2D.Rect;
 import ija.ija2023.ija_project.SimulationLib2D.Robot;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.ArcType;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.StrokeType;
 
 
 import java.util.ArrayList;
@@ -46,20 +41,12 @@ public class AutoRobot extends BaseRobot {
     {
         if(sim.obstacleDetection(colliders) || sim.robotDetection(robotColliders))
         {
-            rotateRobot(turnAngle * turnDirection * deltaTime);
-
-            this.colliderRect.setRotate(sim.getRotation());
+            rotateRobot(turnSpeed * turnDirection * deltaTime);
         }
         else
         {
             moveRobot(deltaTime * speed);
-
-            this.setCenterX(sim.getX());
-            this.setCenterY(sim.getY());
         }
-
-        this.colliderRect.setX(sim.colliderFwd.getX() - sim.colliderFwd.getWidth() / 2);
-        this.colliderRect.setY(sim.colliderFwd.getY() - sim.colliderFwd.getHeight() / 2);
     }
 
 }
