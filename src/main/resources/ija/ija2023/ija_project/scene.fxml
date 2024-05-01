@@ -19,7 +19,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.Color?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="600.0" minWidth="800.0" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ija.ija2023.ija_project.Controller">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="600.0" minWidth="800.0" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ija.ija2023.ija_project.Controller">
    <children>
       <ScrollPane fx:id="simulationSpace" layoutX="241.0" prefHeight="600.0" prefWidth="560.0">
         <content>
@@ -63,6 +63,16 @@
                                  </children>
                               </HBox>
                               <Button mnemonicParsing="false" onAction="#world_apply_world_border" text="Apply world border" />
+                              <HBox prefHeight="25.0" prefWidth="200.0" spacing="5.0">
+                                 <children>
+                                    <Button mnemonicParsing="false" onAction="#world_load_file" prefHeight="25.0" prefWidth="113.0" text="Load from file" />
+                                 </children>
+                              </HBox>
+                              <HBox prefHeight="25.0" prefWidth="200.0" spacing="5.0">
+                                 <children>
+                                    <Button mnemonicParsing="false" onAction="#world_write_file" prefHeight="25.0" prefWidth="113.0" text="Write to file" />
+                                 </children>
+                              </HBox>
                            </children>
                         </VBox>
                      </children></AnchorPane>

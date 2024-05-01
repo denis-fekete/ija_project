@@ -215,7 +215,12 @@ public class Robot extends Circle {
                     {
                         return true;
                     }
+
                 }
+
+                // check if other robot is not inside robot collider
+                if(this.colliderFwd.pointInRectangle(other.getPos()))
+                    return  true;
             }
         }
 

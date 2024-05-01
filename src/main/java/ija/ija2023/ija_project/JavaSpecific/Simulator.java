@@ -140,11 +140,33 @@ public class Simulator extends AnimationTimer {
     }
 
     public void addManualRobot(double x, double y, double radius, double rot,
-                                     double detRadius, Color color)
+                               double detRadius, Color color)
     {
         // create new robot, 10, 45, 1 = random default values
         ManualRobot newRobot = ManualRobot.create(x, y, radius, rot,
-                detRadius, color, 0, 0, 0,
+                detRadius, color, 0, 0, 1,
+                false, false, rot,
+                colliders, robotColliders, this);
+
+        // add it to array of BaseRobots
+        robots.add(newRobot);
+        // add it to array of robot colliders
+        robotColliders.add(newRobot.getSim());
+
+        // add new robot to the scene
+        world.getChildren().addAll(newRobot, newRobot.colliderRect);
+        scrollPane.setContent(world);
+    }
+
+    public void addManualRobot(double x, double y, double radius, double rot,
+                               double detRadius, Color color, double speed,
+                               double turnAngle, boolean spinClockwise,
+                               boolean spinAnticlockwise, double desiredAngle)
+    {
+        // create new robot, 10, 45, 1 = random default values
+        ManualRobot newRobot = ManualRobot.create(x, y, radius, rot,
+                detRadius, color, speed, turnAngle, 1,
+                spinClockwise, spinAnticlockwise, desiredAngle,
                 colliders, robotColliders, this);
 
         // add it to array of BaseRobots

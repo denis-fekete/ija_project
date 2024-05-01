@@ -42,6 +42,9 @@ public class Main extends Application {
         simulator = new Simulator(controller.getSimulationPane(), controller);
         // add simulator to controller for calling of Simulator interface methods
         controller.setSimulator(simulator);
+        // add stage to controller for popup windows
+        controller.setMainWindowStage(stage);
+
         // apply default world size restrictions
         controller.world_apply_world_border();
 

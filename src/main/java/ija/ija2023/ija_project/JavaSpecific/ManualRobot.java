@@ -25,24 +25,32 @@ public class ManualRobot extends BaseRobot {
     private ManualRobot(double x, double y, double radius, double rot,
                       double detRadius, Color color, double speed,
                       double turnAngle, int turnDirection,
+                      boolean spinClockwise, boolean spinAnticlockwise,
+                      double desiredAngle,
                       ArrayList<Rect> obstacles,
                       ArrayList<Robot> robotColliders,
                       Simulator simulator)
     {
         super(x, y, radius, rot, detRadius, color, speed, turnAngle, turnDirection, obstacles, robotColliders, simulator);
-        spinClockwise = false;
-        spinAnticlockwise = false;
-        desiredAngle = rot;
+        this.spinClockwise = spinClockwise;
+        this.spinAnticlockwise = spinAnticlockwise;
+        this.desiredAngle = desiredAngle;
     }
 
     public static ManualRobot create(double x, double y, double radius, double rot,
                      double detRadius, Color color, double speed,
                      double turnAngle, int turnDirection,
+                     boolean spinClockwise, boolean spinAnticlockwise,
+                     double desiredAngle,
                      ArrayList<Rect> obstacles,
                      ArrayList<Robot> robotColliders,
                      Simulator simulator)
     {
-        ManualRobot newRobot = new ManualRobot(x, y, radius, rot, detRadius, color, speed, turnAngle, turnDirection, obstacles, robotColliders, simulator);
+        ManualRobot newRobot = new ManualRobot(x, y, radius, rot, detRadius,
+                color, speed, turnAngle, turnDirection,
+                spinClockwise, spinAnticlockwise, desiredAngle,
+                obstacles, robotColliders, simulator);
+
         newRobot.initialize();
 
         return newRobot;

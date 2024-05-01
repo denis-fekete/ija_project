@@ -1,7 +1,8 @@
 package ija.ija2023.ija_project;
 
 import ija.ija2023.ija_project.JavaSpecific.ManualRobot;
-import  ija.ija2023.ija_project.JavaSpecific.Simulator;
+import ija.ija2023.ija_project.JavaSpecific.SaveManager;
+import ija.ija2023.ija_project.JavaSpecific.Simulator;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -9,12 +10,27 @@ import javafx.scene.control.*;
 import javafx.event.ActionEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.stage.Popup;
+import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
+    /**
+     * Reference to the simulator
+     */
     Simulator simulator;
+
+    /**
+     * Reference to the main window stage
+     */
+    Stage mainWindowStage;
+
+    /**
+     * SaveManger object for loading and saving data
+     */
+    SaveManager saveManager;
 
     @FXML
     private HBox timeMenu;
@@ -108,6 +124,11 @@ public class Controller implements Initializable {
 
 
     // ------------------------------------------------------------------------
+
+
+    public void setMainWindowStage(Stage mainWindowStage) {
+        this.mainWindowStage = mainWindowStage;
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -383,5 +404,47 @@ public class Controller implements Initializable {
         simulator.setSize(world_size_x.getValue(), world_size_y.getValue());
         simulationSpace.setPrefWidth(world_size_x.getValue());
         simulationSpace.setPrefHeight(world_size_y.getValue());
+    }
+
+    @FXML
+    void world_load_file()
+    {
+        if(saveManager == null)
+        {
+            saveManager = new SaveManager(simulator, mainWindowStage);
+        }
+
+        try
+        {
+            saveManager.loadFromFile();
+        }
+        catch (Exception e)
+        {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Failed to load file");
+            alert.setContentText("Exception occurred while loading from input XML file.");
+            alert.showAndWait();
+        }
+    }
+
+    @FXML
+    void world_write_file()
+    {
+        if(saveManager == null)
+        {
+            saveManager = new SaveManager(simulator, mainWindowStage);
+        }
+
+        try
+        {
+            saveManager.saveToFile();
+        }
+        catch (Exception e)
+        {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Failed to load file");
+            alert.setContentText("Exception occurred while writing to output XML file.");
+            alert.showAndWait();
+        }
     }
 }

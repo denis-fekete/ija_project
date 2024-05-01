@@ -224,4 +224,8 @@ public class BaseRobot extends javafx.scene.shape.Circle {
                 sim.colliderFwd.getRT().getX() < 0 ||
                 sim.colliderFwd.getRT().getY() < 0);
     }
+
+    public int getTurnDirection() {
+        return turnDirection;
+    }
 }
