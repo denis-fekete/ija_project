@@ -1,5 +1,10 @@
 package ija.ija2023.ija_project.SimulationLib2D;
 
+/**
+ * Line is basic class for linking two points into a line
+ *
+ * @author Denis Fekete (xfeket01@fit.vutbr.cz)
+ */
 public class Line {
     Point start;
     Point end;

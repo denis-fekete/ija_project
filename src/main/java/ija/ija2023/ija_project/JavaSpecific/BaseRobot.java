@@ -9,6 +9,14 @@ import javafx.scene.shape.StrokeType;
 
 import java.util.ArrayList;
 
+/**
+ * BaseRobot is class for graphical representation of Robots from simulation
+ * library, it is meant as a interface between user and simulations that are
+ * calculated. BaseRobot is not meant to be instantiated or user, it is meant
+ * as a base class for specialization of Robots.
+ *
+ * @author Denis Fekete (xfeket01@fit.vutbr.cz)
+ */
 public class BaseRobot extends javafx.scene.shape.Circle {
 
     /**
@@ -74,9 +82,9 @@ public class BaseRobot extends javafx.scene.shape.Circle {
      * @param speed          Speed of the AutoRobot
      * @param turnSpeed      Turn angle on collision detection
      * @param turnDirection  Turn direction, -1 or 1
-     * @param obstacles      Pointer to the vector of obstacles
-     * @param robotColliders Pointer to the vector of all robots
-     * @param simulator      Pointer to the simulator
+     * @param obstacles      Vector of obstacles
+     * @param robotColliders Vector of all robots
+     * @param simulator      Simulator object
      */
     public BaseRobot(double x, double y, double radius, double rot,
                      double detRadius, Color color, double speed,
@@ -99,7 +107,11 @@ public class BaseRobot extends javafx.scene.shape.Circle {
                 Math.min(color.getGreen() + 0.15, 0.93));
     }
 
-    public void initialize()
+    /**
+     * Initializes this BaseRobot object, correctly rotates it,
+     * sets drawing style, implements on drag function
+     */
+    protected void initialize()
     {
         // initialize collider
         this.colliderRect = new Rectangle(   sim.colliderFwd.getX(),
@@ -142,6 +154,10 @@ public class BaseRobot extends javafx.scene.shape.Circle {
         });
     }
 
+    /**
+     * Rotates simulation and graphical representation of the robot
+     * @param angle Angle by which will be the robot rotated
+     */
     public void rotateRobot(double angle)
     {
         sim.rotate(angle);
@@ -152,6 +168,11 @@ public class BaseRobot extends javafx.scene.shape.Circle {
         this.colliderRect.setRotate(sim.colliderFwd.getRotation());
     }
 
+    /**
+     * Moves simulation and graphical representation of the robot in forward
+     * direction by distance
+     * @param distance Distance that robot will be moved by
+     */
     public void moveRobot(double distance)
     {
         sim.moveForward(distance);
@@ -163,6 +184,10 @@ public class BaseRobot extends javafx.scene.shape.Circle {
         this.colliderRect.setY(sim.colliderFwd.getY() - sim.colliderFwd.getHeight() / 2);
     }
 
+    /**
+     * Moves simulation and graphical representation of the robot to given point
+     * @param p Point which will be the new center of robot
+     */
     public void moveRobotTo(Point p)
     {
         sim.moveTo(p);
@@ -179,39 +204,68 @@ public class BaseRobot extends javafx.scene.shape.Circle {
      */
     public void simulate(double deltaTime) {}
 
+    /**
+     * Returns objects on simulation layer (Robot object), that calculates
+     * simulation and collisions
+     * @return Simulation of this robot
+     */
     public Robot getSim() {
         return sim;
     }
 
+    /**
+     * Selects this robot and highlighting it
+     */
     public void selectRobot()
     {
         this.setStroke(highlightedColor);
         this.setStrokeWidth(5);
     }
 
+    /**
+     * Unselects this robot and un-highlighting
+     */
     public void unselectRobot()
     {
         this.setStroke(color);
         this.setStrokeWidth(1);
     }
 
+    /**
+     * @return Returns speed of this robot
+     */
     public double getSpeed()
     {
         return this.speed;
     }
 
+    /**
+     * Sets speed of this robot
+     * @param speed Value to be set
+     */
     public void setSpeed(double speed) {
         this.speed = speed;
     }
 
+    /**
+     * @return Returns turning speed of this robot
+     */
     public double getTurnSpeed() {
         return turnSpeed;
     }
 
+    /**
+     * Sets new turning speed of the robot
+     * @param turnSpeed New value to be set
+     */
     public void setTurnSpeed(double turnSpeed) {
         this.turnSpeed = turnSpeed;
     }
 
+    /**
+     * Checks if robot is outside of the simulation
+     * @return True if yes, false if no
+     */
     public boolean isOutside()
     {
         return (sim.colliderFwd.getRB().getX() > simulator.getSpaceWidth() ||
@@ -225,6 +279,9 @@ public class BaseRobot extends javafx.scene.shape.Circle {
                 sim.colliderFwd.getRT().getY() < 0);
     }
 
+    /**
+     * @return Returns turn direction of the robot
+     */
     public int getTurnDirection() {
         return turnDirection;
     }

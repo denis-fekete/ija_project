@@ -1,12 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package ija.ija2023.ija_project.SimulationLib2D;
 
 /**
+ * This is Circle class for simulation circle objects in space
  *
- * @author Diony
+ * @author Denis Fekete (xfeket01@fit.vutbr.cz)
  */
 public class Circle extends Point{
     /**

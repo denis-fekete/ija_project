@@ -1,12 +1,13 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package ija.ija2023.ija_project.SimulationLib2D;
 
 /**
+ * Rectangle is a class for representing rectangular or polygonal convex
+ * shapes with four corners. It contains definition for moving and rotating
+ * object with respect to its center. Also holds implementation of collision
+ * detection between other rectangles
  *
- * @author Diony
+ * @author Denis Fekete (xfeket01@fit.vutbr.cz)
  */
 public class Rect extends Circle {
     /**

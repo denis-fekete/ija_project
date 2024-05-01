@@ -9,13 +9,16 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.event.ActionEvent;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.stage.Popup;
 import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * Controller is class for implementing methods of GUI elements
+ *
+ * @author Denis Fekete (xfeket01@fit.vutbr.cz)
+ */
 public class Controller implements Initializable {
     /**
      * Reference to the simulator
@@ -171,8 +174,7 @@ public class Controller implements Initializable {
 
     private void setRobotMoveDefaultValues()
     {
-        robotmove_speedmax.getValueFactory().setValue(50.0);
-        robotmove_rotation_speed.getValueFactory().setValue(45.0);
+        robotmove_speedmax.getValueFactory().setValue(300.0);
         robotmove_speedslider.setValue(0);
         robotmove_desired_angle.setValue(0);
         robotmove_rotation_speed.getValueFactory().setValue(45.0);
@@ -393,7 +395,16 @@ public class Controller implements Initializable {
 
     @FXML
     void robotmove_max_speed_changed() {
+        // if new speed limit is lower than actual robot speed
+        if(robotmove_speedmax.getValueFactory().getValue() < robotmove_speedslider.getValue())
+        {
+            // set new speed
+            simulator.getActiveManualRobot().setSpeed(robotmove_speedmax.getValueFactory().getValue());
+            robotmove_speedslider.setValue(robotmove_speedmax.getValueFactory().getValue());
+        }
+
         robotmove_speedslider.setMax(robotmove_speedmax.getValue());
+        robotmove_speedslider.setMajorTickUnit(robotmove_speedmax.getValueFactory().getValue() / 10);
     }
 
     // ------------------------------------------------------------------------

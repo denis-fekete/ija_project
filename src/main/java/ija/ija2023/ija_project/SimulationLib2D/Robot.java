@@ -3,8 +3,12 @@ package ija.ija2023.ija_project.SimulationLib2D;
 import java.util.ArrayList;
 
 /**
+ * Robot is class for simulating Robot object in simulation space, it
+ * contains algorithm for colliding with another Robots. It also stores
+ * array of all Rectangles that Robot can collide with. Robot also contains
+ * collider that is used for collision detection.
  *
- * @author Diony
+ * @author Denis Fekete (xfeket01@fit.vutbr.cz)
  */
 public class Robot extends Circle {
     // Value of radius for collision detection

@@ -14,6 +14,12 @@ import javafx.scene.layout.*;
 
 import ija.ija2023.ija_project.JavaSpecific.Simulator;
 
+/**
+ * Main is main class of this application, initializing all data-structures and
+ * objects needed for application and simulation run
+ *
+ * @author Denis Fekete (xfeket01@fit.vutbr.cz)
+ */
 public class Main extends Application {
     /**
      * Simulator holding information about and object for simulation collisions
@@ -25,6 +31,11 @@ public class Main extends Application {
      */
     Pane root;
 
+    /**
+     * Method that for initializing all internal objects and showing window
+     * @param stage Stage of the window
+     * @throws IOException
+     */
     @Override
     public void start(Stage stage) throws IOException {
         root = new Pane(); // pane storing all contents
@@ -74,6 +85,9 @@ public class Main extends Application {
         launch();
     }
 
+    /**
+     * @return Returns simulation object
+     */
     public Simulator getSimulator()
     {
         return simulator;

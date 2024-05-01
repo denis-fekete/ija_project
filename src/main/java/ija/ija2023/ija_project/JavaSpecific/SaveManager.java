@@ -13,6 +13,12 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 import javafx.stage.Stage;
 
+/**
+ * SaveManger is class for storing and loading Simulator space with its objects
+ * into an human-readable form (XML)
+ *
+ * @author Denis Fekete (xfeket01@fit.vutbr.cz)
+ */
 public class SaveManager {
     /**
      * Reference to the Simulator where objects will be stored/read from
@@ -24,12 +30,21 @@ public class SaveManager {
      */
     Stage mainWindowStage;
 
+    /**
+     * Constructor of SaveManger
+     * @param simulator Simulator object to manipulate simulation
+     * @param mainWindowStage Stage of main window to show popup windows and warnings
+     */
     public SaveManager(Simulator simulator, Stage mainWindowStage)
     {
         this.simulator = simulator;
         this.mainWindowStage = mainWindowStage;
     }
 
+    /**
+     * Loads simulation from xml file to current simulation
+     * @throws ParserConfigurationException
+     */
     public void loadFromFile() throws ParserConfigurationException {
         DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 
@@ -114,6 +129,11 @@ public class SaveManager {
         }
     }
 
+    /**
+     * Reads <Robots> from xml file
+     * @param root Root/parent element
+     * @return True on success, false on error
+     */
     private boolean readRobots(Element root)
     {
         NodeList nodes = root.getChildNodes();
@@ -142,6 +162,11 @@ public class SaveManager {
         return true;
     }
 
+    /**
+     * Reads single <Robot> from xml file
+     * @param root Root/parent element
+     * @return True on success, false on error
+     */
     private boolean readRobot(Element root)
     {
         NodeList nodes = root.getChildNodes();
@@ -233,6 +258,11 @@ public class SaveManager {
         return true;
     }
 
+    /**
+     * Reads <Obstacle> from xml file
+     * @param root Root/parent element
+     * @return True on success, false on error
+     */
     boolean readObstacles(Element root)
     {
         NodeList nodes = root.getChildNodes();
@@ -261,6 +291,11 @@ public class SaveManager {
         return true;
     }
 
+    /**
+     * Reads <Obstacle> from xml file
+     * @param root Root/parent element
+     * @return True of success, false on error
+     */
     boolean readObstacle(Element root)
     {
         NodeList nodes = root.getChildNodes();
@@ -318,6 +353,10 @@ public class SaveManager {
         return true;
     }
 
+    /**
+     * Saves current simulation state into a XML file
+     * @throws ParserConfigurationException
+     */
     public void saveToFile () throws ParserConfigurationException
     {
         DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -367,6 +406,12 @@ public class SaveManager {
         }
     }
 
+    /**
+     * Loads Robots from simulation and returns Element containing these
+     * robots as sub elements
+     * @param doc Parent Document object
+     * @return Returns element containing all robots from simulation
+     */
     Element loadRobotsFromScene(Document doc)
     {
         Element robots = doc.createElement("Robots");
@@ -446,6 +491,12 @@ public class SaveManager {
         return robots;
     }
 
+    /**
+     * Loads Obstacle from simulation and returns Element containing these
+     * robots as sub elements
+     * @param doc Parent Document object
+     * @return Returns element containing all obstacles from simulation
+     */
     Element loadObstaclesFromScene(Document doc)
     {
         Element obstacles = doc.createElement("Obstacles");
@@ -493,6 +544,10 @@ public class SaveManager {
         return obstacles;
     }
 
+    /**
+     * Opens waring popup window with given message
+     * @param text Message that window will contain
+     */
     public void parsingError(String text)
     {
         Alert alert = new Alert(Alert.AlertType.WARNING);

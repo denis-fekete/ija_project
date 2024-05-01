@@ -271,15 +271,15 @@
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
                         <Slider fx:id="robotmove_desired_angle" layoutX="10.0" layoutY="30.0" majorTickUnit="45.0" max="180.0" min="-180.0" minorTickCount="5" onMouseClicked="#robotmove_angle_changed" onMouseDragReleased="#robotmove_angle_changed" prefHeight="40.0" prefWidth="220.0" showTickLabels="true" snapToTicks="true" />
-                        <Slider fx:id="robotmove_speedslider" layoutX="110.0" layoutY="210.0" majorTickUnit="50.0" max="300.0" onMouseDragged="#robotmove_speed_changed" orientation="VERTICAL" prefHeight="220.0" prefWidth="30.0" showTickLabels="true" snapToTicks="true" />
-                        <Spinner fx:id="robotmove_speedmax" editable="true" layoutX="150.0" layoutY="221.0" onKeyTyped="#robotmove_max_speed_changed" prefHeight="25.0" prefWidth="70.0">
+                        <Slider fx:id="robotmove_speedslider" layoutX="110.0" layoutY="210.0" majorTickUnit="30.0" max="300.0" minorTickCount="15" onDragExited="#robotmove_speed_changed" onMouseClicked="#robotmove_speed_changed" orientation="VERTICAL" prefHeight="220.0" prefWidth="30.0" showTickLabels="true" snapToTicks="true" />
+                        <Spinner fx:id="robotmove_speedmax" editable="true" layoutX="150.0" layoutY="221.0" onKeyReleased="#robotmove_max_speed_changed" onMouseClicked="#robotmove_max_speed_changed" prefHeight="25.0" prefWidth="70.0">
                            <valueFactory>
                               <SpinnerValueFactory.DoubleSpinnerValueFactory max="99999" min="0" />
                            </valueFactory>
                         </Spinner>
                         <Label layoutX="105.0" layoutY="14.0" text="Angle" />
                         <Label layoutX="143.0" layoutY="204.0" text="Maximum value" />
-                        <Spinner fx:id="robotmove_rotation_speed" editable="true" layoutX="14.0" layoutY="145.0" onKeyTyped="#robotmove_rot_speed_changed" onMouseClicked="#robotmove_rot_speed_changed" prefHeight="25.0" prefWidth="70.0">
+                        <Spinner fx:id="robotmove_rotation_speed" editable="true" layoutX="14.0" layoutY="145.0" onKeyPressed="#robotmove_rot_speed_changed" onMouseClicked="#robotmove_rot_speed_changed" prefHeight="25.0" prefWidth="70.0">
                            <valueFactory>
                               <SpinnerValueFactory.DoubleSpinnerValueFactory max="99999" min="0" />
                            </valueFactory>

@@ -1,11 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package ija.ija2023.ija_project.SimulationLib2D;
+
 /**
+ * Point is basic class for representing positions in simulated space
  *
- * @author Diony
+ * @author Denis Fekete (xfeket01@fit.vutbr.cz)
  */
 public class Point{
     protected double x;
