@@ -1,17 +1,17 @@
+/**
+ * Implementation of BaseRobot class. ManualRobot is specialization of BaseRobot that can only be controlled by
+ * user inputs (through GUI)
+ *
+ * @author Denis Fekete (xfeket01@fit.vutbr.cz)
+ */
+
 package ija.ija2023.ija_project.JavaSpecific;
 
 import ija.ija2023.ija_project.SimulationLib2D.Rect;
 import ija.ija2023.ija_project.SimulationLib2D.Robot;
 import javafx.scene.paint.Color;
-
 import java.util.ArrayList;
 
-/**
- * ManualRobot is specialization of BaseRobot that can only be controlled by
- * user inputs (through GUI)
- *
- * @author Denis Fekete (xfeket01@fit.vutbr.cz)
- */
 public class ManualRobot extends BaseRobot {
     /**
      * If set to true robot will spin clockwise direction

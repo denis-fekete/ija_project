@@ -1,10 +1,11 @@
-package ija.ija2023.ija_project.SimulationLib2D;
-
 /**
- * Point is basic class for representing positions in simulated space
+ * Implementation of Point class. Point class for representing positions in simulated space
  *
  * @author Denis Fekete (xfeket01@fit.vutbr.cz)
  */
+
+package ija.ija2023.ija_project.SimulationLib2D;
+
 public class Point{
     protected double x;
     protected double y;

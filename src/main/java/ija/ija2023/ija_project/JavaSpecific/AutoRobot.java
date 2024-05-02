@@ -1,3 +1,11 @@
+/**
+ * Implementation of AutoRobot class. AutoRobot is a specialization of
+ * BaseRobot, which moves on its own and doesn't need user
+ * interference (mostly doesn't allow it)
+ *
+ * @author Denis Fekete (xfeket01@fit.vutbr.cz)
+ */
+
 package ija.ija2023.ija_project.JavaSpecific;
 
 import ija.ija2023.ija_project.SimulationLib2D.Rect;
@@ -7,12 +15,7 @@ import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 
-/**
- * AutoRobot is a specialization of BaseRobot, this type moves on its own and
- * doesn't need user interference (mostly doesn't allow it)
- *
- * @author Denis Fekete (xfeket01@fit.vutbr.cz)
- */
+
 public class AutoRobot extends BaseRobot {
 
     /**

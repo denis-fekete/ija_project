@@ -1,9 +1,15 @@
+/**
+ * Implementation of Controller class. Controller is class for implementing
+ * methods of GUI elements
+ *
+ * @author Denis Fekete (xfeket01@fit.vutbr.cz)
+ */
+
 package ija.ija2023.ija_project;
 
 import ija.ija2023.ija_project.JavaSpecific.ManualRobot;
 import ija.ija2023.ija_project.JavaSpecific.SaveManager;
 import ija.ija2023.ija_project.JavaSpecific.Simulator;
-
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -11,15 +17,9 @@ import javafx.event.ActionEvent;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.scene.layout.AnchorPane;
-
 import java.net.URL;
 import java.util.ResourceBundle;
 
-/**
- * Controller is class for implementing methods of GUI elements
- *
- * @author Denis Fekete (xfeket01@fit.vutbr.cz)
- */
 public class Controller implements Initializable {
     /**
      * Reference to the simulator

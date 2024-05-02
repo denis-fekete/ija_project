@@ -1,19 +1,18 @@
+/**
+ * Implementation of Obstacle class. Obstacle is class for GUI representation
+ * of Rectangle objects from simulation library, it is meant to be "interface"
+ * between user and simulation that is calculated.
+ *
+ * @author Denis Fekete (xfeket01@fit.vutbr.cz)
+ */
+
 package ija.ija2023.ija_project.JavaSpecific;
 
 import ija.ija2023.ija_project.SimulationLib2D.Rect;
 import ija.ija2023.ija_project.SimulationLib2D.Point;
-import javafx.scene.input.MouseEvent;
-import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.StrokeType;
 
-/**
- * Obstacle is class for GUI representation of Rectangle objects from
- * simulation library, it is meant to be "interface" between user and
- * simulation that is calculated.
- *
- * @author Denis Fekete (xfeket01@fit.vutbr.cz)
- */
 public class Obstacle extends  javafx.scene.shape.Rectangle {
 
     /**

@@ -1,25 +1,24 @@
+/**
+ * Implementation of Simulator class. Simulator is class responsible for
+ * managing Robots and Obstacles. It is meant to have only one instance
+ * in program. It is main interface between GUI and simulations that are
+ * calculated by SimulationLib2D classes.
+ *
+ * @author Denis Fekete (xfeket01@fit.vutbr.cz)
+ */
+
 package ija.ija2023.ija_project.JavaSpecific;
 
 import java.util.ArrayList;
 
 import ija.ija2023.ija_project.Controller;
 import javafx.animation.AnimationTimer;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-
 import ija.ija2023.ija_project.SimulationLib2D.*;
-import javafx.scene.paint.RadialGradient;
 import javafx.scene.shape.Rectangle;
 
-/**
- * Simulator is class responsible for managing Robots and Obstacles. It is
- * meant to have only one instance in program. It is main interface between
- * GUI and simulations that are calculated by SimulationLib2D classes.
- *
- * @author Denis Fekete (xfeket01@fit.vutbr.cz)
- */
 public class Simulator extends AnimationTimer {
     /**
      * Array of all obstacles
@@ -129,6 +128,11 @@ public class Simulator extends AnimationTimer {
 
     }
 
+    /**
+     * Creates new instance of Simulator objects, set its initial values and returns it
+     * @param scrollPane Scroll pane to which the objects will be stored
+     * @param controller Controller object to interact with GUI
+     */
     public static Simulator create(ScrollPane scrollPane, Controller controller)
     {
         Simulator newSimulator = new Simulator(scrollPane, controller);

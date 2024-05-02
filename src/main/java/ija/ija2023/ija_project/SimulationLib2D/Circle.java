@@ -1,10 +1,12 @@
-package ija.ija2023.ija_project.SimulationLib2D;
-
 /**
- * This is Circle class for simulation circle objects in space
+ * Implementation of Circle class.  Circle class is for simulating circle
+ * objects in simulation space
  *
  * @author Denis Fekete (xfeket01@fit.vutbr.cz)
  */
+
+package ija.ija2023.ija_project.SimulationLib2D;
+
 public class Circle extends Point{
     /**
      * Rotation of this Circle

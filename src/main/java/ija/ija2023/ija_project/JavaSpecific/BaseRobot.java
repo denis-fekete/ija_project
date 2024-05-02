@@ -1,3 +1,12 @@
+/**
+ * Implementation of BaseRobot class. BaseRobot is class for graphical representation of Robots from simulation
+ * library, it is meant as a interface between user and simulations that are
+ * calculated. BaseRobot is not meant to be instantiated or user, it is meant
+ * as a base class for specialization of Robots.
+ *
+ * @author Denis Fekete (xfeket01@fit.vutbr.cz)
+ */
+
 package ija.ija2023.ija_project.JavaSpecific;
 
 import ija.ija2023.ija_project.SimulationLib2D.Point;
@@ -9,14 +18,6 @@ import javafx.scene.shape.StrokeType;
 
 import java.util.ArrayList;
 
-/**
- * BaseRobot is class for graphical representation of Robots from simulation
- * library, it is meant as a interface between user and simulations that are
- * calculated. BaseRobot is not meant to be instantiated or user, it is meant
- * as a base class for specialization of Robots.
- *
- * @author Denis Fekete (xfeket01@fit.vutbr.cz)
- */
 public class BaseRobot extends javafx.scene.shape.Circle {
 
     /**

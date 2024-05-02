@@ -1,14 +1,14 @@
-
-package ija.ija2023.ija_project.SimulationLib2D;
-
 /**
- * Rectangle is a class for representing rectangular or polygonal convex
- * shapes with four corners. It contains definition for moving and rotating
- * object with respect to its center. Also holds implementation of collision
- * detection between other rectangles
+ * Implementation of Rectangle class. Rectangle is a class for representing
+ * rectangular or polygonal convex shapes with four corners. It contains
+ * definition for moving and rotating object with respect to its center.
+ * Also holds implementation of collision detection between other rectangles
  *
  * @author Denis Fekete (xfeket01@fit.vutbr.cz)
  */
+
+package ija.ija2023.ija_project.SimulationLib2D;
+
 public class Rect extends Circle {
     /**
      * Width of this Rectangle

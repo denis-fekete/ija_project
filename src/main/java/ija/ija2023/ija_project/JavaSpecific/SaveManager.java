@@ -1,3 +1,10 @@
+/**
+ * Implementation of SaveManager class. SaveManger is class for storing and
+ * loading Simulator space with its objects into a human-readable form (XML)
+ *
+ * @author Denis Fekete (xfeket01@fit.vutbr.cz)
+ */
+
 package ija.ija2023.ija_project.JavaSpecific;
 
 import javafx.scene.control.Alert;
@@ -13,12 +20,6 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 import javafx.stage.Stage;
 
-/**
- * SaveManger is class for storing and loading Simulator space with its objects
- * into an human-readable form (XML)
- *
- * @author Denis Fekete (xfeket01@fit.vutbr.cz)
- */
 public class SaveManager {
     /**
      * Reference to the Simulator where objects will be stored/read from

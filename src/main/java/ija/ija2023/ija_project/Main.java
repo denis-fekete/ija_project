@@ -1,25 +1,21 @@
-package ija.ija2023.ija_project;
-
-import java.io.IOException;
-
-import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.stage.Stage;
-
-import javafx.scene.paint.*;
-import javafx.scene.layout.*;
-
-import ija.ija2023.ija_project.JavaSpecific.Simulator;
-
 /**
- * Main is main class of this application, initializing all data-structures and
- * objects needed for application and simulation run
+ * Implementation of Main application class. Main is main class of this
+ * application, initializing all data-structures and objects needed for
+ * application and simulation run
  *
  * @author Denis Fekete (xfeket01@fit.vutbr.cz)
  */
+
+package ija.ija2023.ija_project;
+
+import java.io.IOException;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import javafx.scene.layout.*;
+import ija.ija2023.ija_project.JavaSpecific.Simulator;
+
 public class Main extends Application {
     /**
      * Simulator holding information about and object for simulation collisions
