@@ -50,14 +50,12 @@ public class Main extends Application {
         Controller controller = fxmlLoader.getController();
 
         // create new simulation with scroll pane from FXML
-        simulator = new Simulator(controller.getSimulationPane(), controller);
+        simulator = Simulator.create(controller.getSimulationPane(), controller);
         // add simulator to controller for calling of Simulator interface methods
         controller.setSimulator(simulator);
         // add stage to controller for popup windows
         controller.setMainWindowStage(stage);
 
-        // apply default world size restrictions
-        controller.world_apply_world_border();
 
         // add scroll pane to the root
         root.getChildren().add(simulator.getScrollPane());
@@ -76,6 +74,9 @@ public class Main extends Application {
         stage.heightProperty().addListener((observable, oldValue, newValue) -> {
             controller.resizeContents(null, newValue);
         });
+
+        // apply default world size restrictions
+        controller.world_apply_world_border();
 
         stage.setScene(scene);
         stage.show();

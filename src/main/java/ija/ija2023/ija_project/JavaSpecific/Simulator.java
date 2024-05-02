@@ -10,6 +10,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
 import ija.ija2023.ija_project.SimulationLib2D.*;
+import javafx.scene.paint.RadialGradient;
+import javafx.scene.shape.Rectangle;
 
 /**
  * Simulator is class responsible for managing Robots and Obstacles. It is
@@ -85,12 +87,22 @@ public class Simulator extends AnimationTimer {
     boolean running;
 
     /**
+     * Rectangle representing world border on X axis
+     */
+    Rectangle worldBorderX;
+
+    /**
+     * Rectangle representing world border on Y axis
+     */
+    Rectangle worldBorderY;
+
+    /**
      * Constructor of simulation object that will simulation robot movement
      * and collisions between robots and obstacles
      * @param scrollPane Scroll pane to which the objects will be stored
      * @param controller Controller object to interact with GUI
      */
-    public Simulator(ScrollPane scrollPane, Controller controller)
+    private Simulator(ScrollPane scrollPane, Controller controller)
     {
         obstacles = new ArrayList<Obstacle>();
         colliders = new ArrayList<Rect>();
@@ -110,6 +122,30 @@ public class Simulator extends AnimationTimer {
         lastUpdate = 0;
 
         running = false;
+
+        worldBorderX = new Rectangle(0, 0, 9999, 9999);
+
+        worldBorderY = new Rectangle(0, 0, 9999, 9999);
+
+    }
+
+    public static Simulator create(ScrollPane scrollPane, Controller controller)
+    {
+        Simulator newSimulator = new Simulator(scrollPane, controller);
+
+        // set rectangles representing world border values
+        newSimulator.worldBorderX.setFill(Color.GRAY);
+        newSimulator.worldBorderY.setFill(Color.GRAY);
+
+        // set view order to high value (low priority)
+        newSimulator.worldBorderX.setViewOrder(4);
+        newSimulator.worldBorderX.setViewOrder(4);
+
+        // add them to the scene
+        newSimulator.world.getChildren().addAll(newSimulator.worldBorderX, newSimulator.worldBorderY);
+        scrollPane.setContent(newSimulator.world);
+
+        return  newSimulator;
     }
 
     /**
@@ -393,6 +429,9 @@ public class Simulator extends AnimationTimer {
     {
         this.spaceWidth = width;
         this.spaceHeight = height;
+
+        worldBorderX.setX(width);
+        worldBorderY.setY(height);
     }
 
     /**

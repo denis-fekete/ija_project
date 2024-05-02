@@ -10,6 +10,7 @@ import javafx.scene.control.*;
 import javafx.event.ActionEvent;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import javafx.scene.layout.AnchorPane;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -125,6 +126,17 @@ public class Controller implements Initializable {
     @FXML // fx:id="world_size_y"
     private Spinner<Double> world_size_y; // Value injected by FXMLLoader
 
+    @FXML
+    private AnchorPane robotcreator_parentPane;
+
+    @FXML
+    private AnchorPane obstaclecreator_parentPane;
+
+    @FXML
+    private AnchorPane world_parentPane;
+
+    @FXML
+    private Button control_btn_resume_stop;
 
     // ------------------------------------------------------------------------
 
@@ -261,15 +273,30 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    void btn_stopSimulation()
+    void control_resume_stop()
     {
-        simulator.pauseSimulation();
-    }
+        if(simulator.isRunnning())
+        {
+            simulator.pauseSimulation();
 
-    @FXML
-    void btn_startSimulation()
-    {
-        simulator.resumeSimulation();
+            // enable menus
+            robotcreator_parentPane.setDisable(false);
+            world_parentPane.setDisable(false);
+            obstaclecreator_parentPane.setDisable(false);
+
+            control_btn_resume_stop.setText("Resume");
+        }
+        else
+        {
+            simulator.resumeSimulation();
+
+            // disable other menus
+            robotcreator_parentPane.setDisable(true);
+            world_parentPane.setDisable(true);
+            obstaclecreator_parentPane.setDisable(true);
+
+            control_btn_resume_stop.setText("Pause");
+        }
     }
 
     // ------------------------------------------------------------------------
@@ -412,9 +439,7 @@ public class Controller implements Initializable {
     @FXML
     public void world_apply_world_border()
     {
-        simulator.setSize(world_size_x.getValue(), world_size_y.getValue());
-        simulationSpace.setPrefWidth(world_size_x.getValue());
-        simulationSpace.setPrefHeight(world_size_y.getValue());
+        simulator.setSize(world_size_x.getValueFactory().getValue(), world_size_y.getValueFactory().getValue());
     }
 
     @FXML
