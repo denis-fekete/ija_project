@@ -13,6 +13,8 @@ import ija.ija2023.ija_project.SimulationLib2D.Point;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.StrokeType;
 
+import java.util.ArrayList;
+
 public class Obstacle extends  javafx.scene.shape.Rectangle {
 
     /**
@@ -36,6 +38,16 @@ public class Obstacle extends  javafx.scene.shape.Rectangle {
     Simulator simulator;
 
     /**
+     * Array of Commands for logging and reverting simulation
+     */
+    ArrayList<Command> log;
+
+    /**
+     * Index of last log in for reverting simulation
+     */
+    int lastLogIndex;
+
+    /**
      * Constructor of Obstacle object
      *
      * @param x              Center X position to be set
@@ -56,6 +68,8 @@ public class Obstacle extends  javafx.scene.shape.Rectangle {
         this.highlightedColor = Color.color(Math.min(color.getRed() + 0.15, 0.93),
                                     Math.min(color.getBlue() + 0.15, 0.93),
                                     Math.min(color.getGreen() + 0.15, 0.93));
+        log = new ArrayList<Command>();
+        lastLogIndex = 0;
     }
 
 
@@ -80,14 +94,20 @@ public class Obstacle extends  javafx.scene.shape.Rectangle {
         // robot main body is 3, robot collider is 1
         newObstacle.setViewOrder(2.0);
 
-        newObstacle.setOnMouseClicked(mouseEvent -> {
+        newObstacle.setOnMousePressed(mouseEvent -> {
             newObstacle.simulator.setActiveObstacle(newObstacle);
+
+            if(simulator.isPaused() && simulator.isSimulatingForward())
+            {
+
+                newObstacle.addLog(CommandType.SAVE_OBSTACLE, simulator.getLogId());
+            }
         });
 
         newObstacle.setStrokeType(StrokeType.INSIDE);
 
         newObstacle.setOnMouseDragged(mouseEvent -> {
-            if(simulator.isPaused())
+            if(simulator.isPaused() && simulator.isSimulatingForward())
             {
                 // Get the scene coordinates of the mouse event
                 double sceneX = mouseEvent.getSceneX();
@@ -150,4 +170,54 @@ public class Obstacle extends  javafx.scene.shape.Rectangle {
         this.setStrokeWidth(1);
     }
 
+    public void addLog(CommandType type, int logId)
+    {
+        switch (type)
+        {
+            case START:
+                log.add(new SimulationCommand(CommandType.START, logId));
+                break;
+            case PAUSE:
+                log.add(new SimulationCommand(CommandType.PAUSE, logId));
+                break;
+            case SAVE_OBSTACLE:
+                log.add(new ObstaclePositionSaveCmd(this, logId));
+                break;
+        }
+
+        lastLogIndex = Math.max(log.size() - 1, 0);
+        System.out.println("Obstacle added log: " + type);
+    }
+
+    public void setParameters(ObstaclePositionSaveCmd cmd)
+    {
+        this.sim.setX(cmd.x);
+        this.sim.setY(cmd.y);
+        this.sim.setRotation(cmd.rot);
+        this.sim.setWidth(cmd.w);
+        this.sim.setHeight(cmd.h);
+
+        rotateObstacle(this.sim.getRotation());
+        moveObstacleTo(sim.getPos());
+    }
+
+    public void reverseSimulate(int logId)
+    {
+
+        if(log.get(lastLogIndex).getType() == CommandType.START)
+        {
+            return;
+        }
+
+        if(log.get(lastLogIndex).logId == logId)
+        {
+            log.remove(lastLogIndex);
+            lastLogIndex--;
+        }
+
+        if (log.get(lastLogIndex).getType() == CommandType.SAVE_OBSTACLE)
+        {
+            setParameters((ObstaclePositionSaveCmd) log.get(lastLogIndex));
+        }
+    }
 }

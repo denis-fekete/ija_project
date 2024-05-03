@@ -99,37 +99,4 @@ public class AutoRobot extends BaseRobot {
             }
         }
     }
-
-    public void reverseSimulate(int logId)
-    {
-        // check if logId parameter is same as lastLogIndex,
-        // if yes set last to logId
-        if(log.get(lastLogIndex - 1).logId == logId)
-        {
-            log.remove(lastLogIndex);
-            lastLogIndex--;
-        }
-
-        if(log.get(lastLogIndex).getType() == CommandType.START)
-        {
-            return;
-        }
-
-        switch (log.get(lastLogIndex - 1).getType())
-        {
-            case MOVE:
-                moveRobot(-speed * SMOOTH_CONST);
-                break;
-            case ROTATE:
-                rotateRobot(turnSpeed * turnDirection * SMOOTH_CONST * (-1));
-                break;
-            case POSITION_CHANGE_AUTO:
-                setParameters((UnpauseCommandAuto) log.get(lastLogIndex - 1));
-                log.remove(lastLogIndex);
-                lastLogIndex--;
-                break;
-            case POSITION_CHANGE_MANUAL:
-                break;
-        }
-    }
 }

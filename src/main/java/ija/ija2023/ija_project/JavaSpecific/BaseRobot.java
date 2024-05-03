@@ -12,7 +12,6 @@ package ija.ija2023.ija_project.JavaSpecific;
 import ija.ija2023.ija_project.SimulationLib2D.Point;
 import ija.ija2023.ija_project.SimulationLib2D.Rect;
 import ija.ija2023.ija_project.SimulationLib2D.Robot;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
@@ -73,12 +72,19 @@ public class BaseRobot extends javafx.scene.shape.Circle {
      */
     ArrayList<Robot> robotColliders;
 
+    /**
+     * Last command that was saved into log
+     */
     CommandType lastCommand;
 
-    CommandType reverseLastCommand;
-
+    /**
+     * Array of Commands for logging and reverting simulation
+     */
     ArrayList<Command> log;
 
+    /**
+     * Index of last log in for reverting simulation
+     */
     int lastLogIndex;
 
     /**
@@ -119,7 +125,6 @@ public class BaseRobot extends javafx.scene.shape.Circle {
 
         this.log = new ArrayList<Command>();
         lastCommand = CommandType.NONE;
-        reverseLastCommand = CommandType.NONE;
         lastLogIndex = -1;
     }
 
@@ -156,7 +161,7 @@ public class BaseRobot extends javafx.scene.shape.Circle {
         });
 
         this.setOnMouseDragged(mouseEvent -> {
-            if(simulator.isPaused())
+            if(simulator.isPaused() && simulator.isSimulatingForward())
             {
                 // Get the scene coordinates of the mouse event
                 double sceneX = mouseEvent.getSceneX();
@@ -169,13 +174,6 @@ public class BaseRobot extends javafx.scene.shape.Circle {
             }
         });
 
-//        this.setOnMouseReleased(mouseDragEvent -> {
-//            if(simulator.isSimulatingForward())
-//            {
-//                this.addLog(CommandType.POSITION_CHANGE_AUTO,
-//                        simulator.getLogId());
-//            }
-//        });
     }
 
     /**
@@ -305,7 +303,7 @@ public class BaseRobot extends javafx.scene.shape.Circle {
         return turnDirection;
     }
 
-    public void setParameters(UnpauseCommandAuto cmd)
+    public void setParameters(AutoRobotPositionSaveCmd cmd)
     {
         this.sim.setX(cmd.x);
         this.sim.setY(cmd.y);
@@ -325,8 +323,6 @@ public class BaseRobot extends javafx.scene.shape.Circle {
      */
     public void simulate(int logId) {}
 
-    public void reverseSimulate(int logId) {}
-
     public void addLog(CommandType type, int logId)
     {
         switch (type)
@@ -339,13 +335,17 @@ public class BaseRobot extends javafx.scene.shape.Circle {
                 log.add(new SimulationCommand(CommandType.ROTATE, logId));
                 lastCommand = CommandType.ROTATE;
                 break;
-            case POSITION_CHANGE_AUTO:
-                log.add(new UnpauseCommandAuto(this, logId));
-                lastCommand = CommandType.POSITION_CHANGE_AUTO;
+            case ROTATE_ANTI:
+                log.add(new SimulationCommand(CommandType.ROTATE_ANTI, logId));
+                lastCommand = CommandType.ROTATE_ANTI;
                 break;
-            case POSITION_CHANGE_MANUAL:
-                log.add(new UnpauseCommandManual(this, logId));
-                lastCommand = CommandType.POSITION_CHANGE_MANUAL;
+            case SAVE_AUTO:
+                log.add(new AutoRobotPositionSaveCmd(this, logId));
+                lastCommand = CommandType.SAVE_AUTO;
+                break;
+            case SAVE_MANUAL:
+                log.add(new ManualRobotPositionSaveCmd(this, logId));
+                lastCommand = CommandType.SAVE_MANUAL;
                 break;
             case PAUSE:
                 log.add(new SimulationCommand(CommandType.PAUSE, logId));
@@ -357,5 +357,44 @@ public class BaseRobot extends javafx.scene.shape.Circle {
 
         System.out.println("Added log: " + type);
         lastLogIndex = Math.max(log.size() - 1, 0);
+    }
+
+    public void reverseSimulate(int logId)
+    {
+        // check if logId parameter is same as lastLogIndex,
+        // if yes set last to logId
+        if(log.get(lastLogIndex - 1).logId == logId)
+        {
+            log.remove(lastLogIndex);
+            lastLogIndex--;
+        }
+
+        if(log.get(lastLogIndex).getType() == CommandType.START)
+        {
+            return;
+        }
+
+        switch (log.get(lastLogIndex - 1).getType())
+        {
+            case MOVE:
+                moveRobot(-speed * SMOOTH_CONST);
+                break;
+            case ROTATE:
+                rotateRobot(turnSpeed * turnDirection * SMOOTH_CONST * (-1));
+                break;
+            case ROTATE_ANTI:
+                rotateRobot(turnSpeed * turnDirection * SMOOTH_CONST);
+                break;
+            case SAVE_AUTO:
+                setParameters((AutoRobotPositionSaveCmd) log.get(lastLogIndex - 1));
+                log.remove(lastLogIndex);
+                lastLogIndex--;
+                break;
+            case SAVE_MANUAL:
+                setParameters((ManualRobotPositionSaveCmd) log.get(lastLogIndex - 1));
+                log.remove(lastLogIndex);
+                lastLogIndex--;
+                break;
+        }
     }
 }

@@ -1,16 +1,16 @@
 package ija.ija2023.ija_project.JavaSpecific;
 
-public class UnpauseCommandManual extends UnpauseCommandAuto
+public class ManualRobotPositionSaveCmd extends AutoRobotPositionSaveCmd
 {
     double desiredAngle;
 
     boolean spinAnticlockwise;
 
     boolean spinClockwise;
-    UnpauseCommandManual(BaseRobot robot, int logId)
+    ManualRobotPositionSaveCmd(BaseRobot robot, int logId)
     {
         super(robot, logId);
-        this.type = CommandType.POSITION_CHANGE_MANUAL;
+        this.type = CommandType.SAVE_MANUAL;
         this.logId = logId;
 
         this.desiredAngle = ((ManualRobot)robot).getDesiredAngle();

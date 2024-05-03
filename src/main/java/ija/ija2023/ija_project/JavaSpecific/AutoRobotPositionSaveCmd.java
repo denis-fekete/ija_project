@@ -1,6 +1,6 @@
 package ija.ija2023.ija_project.JavaSpecific;
 
-public class UnpauseCommandAuto extends Command
+public class AutoRobotPositionSaveCmd extends Command
 {
     double x;
     double y;
@@ -10,9 +10,9 @@ public class UnpauseCommandAuto extends Command
     double radius;
     double detectionRadius;
     double turnSpeed;
-    UnpauseCommandAuto(BaseRobot robot, int logId)
+    AutoRobotPositionSaveCmd(BaseRobot robot, int logId)
     {
-        this.type = CommandType.POSITION_CHANGE_AUTO;
+        this.type = CommandType.SAVE_AUTO;
         this.logId = logId;
 
         this.x = robot.getSim().getX();

@@ -7,6 +7,7 @@
 
 package ija.ija2023.ija_project;
 
+import ija.ija2023.ija_project.JavaSpecific.CommandType;
 import ija.ija2023.ija_project.JavaSpecific.ManualRobot;
 import ija.ija2023.ija_project.JavaSpecific.SaveManager;
 import ija.ija2023.ija_project.JavaSpecific.Simulator;
@@ -362,6 +363,7 @@ public class Controller implements Initializable {
         }
 
         robot.setDesiredAngle(robotmove_desired_angle.getValue());
+        robot.addLog(CommandType.SAVE_MANUAL, simulator.getLogId());
     }
 
     @FXML
@@ -385,6 +387,7 @@ public class Controller implements Initializable {
             robot.setSpinClockwise(false);
             robot.setDesiredAngle(robot.getSim().getRotation());
         }
+        robot.addLog(CommandType.SAVE_MANUAL, simulator.getLogId());
     }
 
     @FXML
@@ -402,13 +405,14 @@ public class Controller implements Initializable {
             robotmove_spin_clockwise.setSelected(false);
             robot.setSpinAnticlockwise(true);
             robot.setSpinClockwise(false);
+
         }
         else
         {
             robot.setSpinAnticlockwise(false);
             robot.setDesiredAngle(robot.getSim().getRotation());
         }
-
+        robot.addLog(CommandType.SAVE_MANUAL, simulator.getLogId());
     }
 
     @FXML
@@ -420,6 +424,7 @@ public class Controller implements Initializable {
         }
 
         robot.setTurnSpeed(robotmove_rotation_speed.getValue());
+        robot.addLog(CommandType.SAVE_MANUAL, simulator.getLogId());
     }
 
     @FXML
@@ -431,6 +436,7 @@ public class Controller implements Initializable {
         }
 
         robot.setSpeed(robotmove_speedslider.getValue());
+        robot.addLog(CommandType.SAVE_MANUAL, simulator.getLogId());
     }
 
     @FXML
@@ -445,6 +451,7 @@ public class Controller implements Initializable {
 
         robotmove_speedslider.setMax(robotmove_speedmax.getValue());
         robotmove_speedslider.setMajorTickUnit(robotmove_speedmax.getValueFactory().getValue() / 10);
+        simulator.getActiveManualRobot().addLog(CommandType.SAVE_MANUAL, simulator.getLogId());
     }
 
     // ------------------------------------------------------------------------

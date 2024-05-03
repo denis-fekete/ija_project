@@ -98,38 +98,79 @@ public class ManualRobot extends BaseRobot {
 
         newRobot.initialize();
 
+        newRobot.setOnMousePressed(mouseEvent -> {
+            if(simulator.isPaused() && simulator.isSimulatingForward())
+            {
+                newRobot.addLog(CommandType.SAVE_MANUAL, simulator.getLogId());
+            }
+        });
+
         return newRobot;
     }
 
     /**
      * One simulation cycle
-     * @param deltaTime Time between frames
+     * @param logId Log ID for logging of commands
      */
-    public void simulate(double deltaTime, long logId)
+    public void simulate(int logId)
     {
         if(spinClockwise)
         {
-            rotateRobot(turnSpeed * deltaTime);
+            rotateRobot( turnSpeed * SMOOTH_CONST);
         }
         else if(spinAnticlockwise)
         {
-            rotateRobot(-turnSpeed * deltaTime);
+            rotateRobot(-turnSpeed * SMOOTH_CONST);
         }
         else if(desiredAngle > this.sim.getRotation() )
         {
-            rotateRobot(turnSpeed * deltaTime);
+            rotateRobot( turnSpeed * SMOOTH_CONST);
         }
         else if(desiredAngle < this.sim.getRotation())
         {
-            rotateRobot(-turnSpeed * deltaTime);
+            rotateRobot(-turnSpeed * SMOOTH_CONST);
         }
-
-        if(speed > 0)
+        else if(speed > 0)
         {
             if(!sim.obstacleDetection(colliders) && !sim.robotDetection(robotColliders) && !isOutside())
             {
-                moveRobot(speed * deltaTime);
+                moveRobot(speed * SMOOTH_CONST);
             }
+        }
+    }
+
+    public void setParameters(ManualRobotPositionSaveCmd cmd)
+    {
+        super.setParameters(cmd);
+
+        this.spinClockwise = cmd.spinClockwise;
+        this.spinAnticlockwise = cmd.spinAnticlockwise;
+        this.desiredAngle = cmd.desiredAngle;
+
+        rotateRobot(0);
+        moveRobotTo(sim.getPos());
+    }
+
+    public void reverseSimulate(int logId)
+    {
+        if(lastLogIndex < 0)
+            return;
+
+        // check if logId parameter is same as lastLogIndex,
+        // if yes set last to logId
+        while(log.get(lastLogIndex).logId == logId)
+        {
+            if(log.get(lastLogIndex).getType() == CommandType.SAVE_MANUAL)
+            {
+                setParameters((ManualRobotPositionSaveCmd) log.get(lastLogIndex));
+                simulator.guiController.setManualRobotParams(this);
+            }
+
+            log.remove(lastLogIndex);
+            lastLogIndex--;
+
+            if(lastLogIndex  < 0)
+                return;
         }
     }
 

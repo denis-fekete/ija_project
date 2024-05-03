@@ -188,6 +188,12 @@ public class Simulator extends AnimationTimer {
             {
                 robot.reverseSimulate(logId);
             }
+
+            for(Obstacle obstacle : obstacles)
+            {
+                obstacle.reverseSimulate(logId);
+            }
+
             logId--;
 
             if(logId < 0)
@@ -231,7 +237,7 @@ public class Simulator extends AnimationTimer {
         robots.add(newRobot);
         // add it to array of robot colliders
         robotColliders.add(newRobot.getSim());
-        newRobot.addLog(CommandType.START, 0);
+        newRobot.addLog(CommandType.START, logId);
 
         // add new robot to the scene
         world.getChildren().addAll(newRobot, newRobot.colliderRect);
@@ -261,6 +267,7 @@ public class Simulator extends AnimationTimer {
         robots.add(newRobot);
         // add it to array of robot colliders
         robotColliders.add(newRobot.getSim());
+//        newRobot.addLog(CommandType.START, logId);
 
         // add new robot to the scene
         world.getChildren().addAll(newRobot, newRobot.colliderRect);
@@ -296,6 +303,7 @@ public class Simulator extends AnimationTimer {
         robots.add(newRobot);
         // add it to array of robot colliders
         robotColliders.add(newRobot.getSim());
+//        newRobot.addLog(CommandType.START, logId);
 
         // add new robot to the scene
         world.getChildren().addAll(newRobot, newRobot.colliderRect);
@@ -319,6 +327,8 @@ public class Simulator extends AnimationTimer {
         Obstacle newObstacle = Obstacle.create(x, y, w, h, rot, color, this);
         obstacles.add(newObstacle);
         colliders.add(newObstacle.getSim());
+
+        newObstacle.addLog(CommandType.START, logId);
 
         world.getChildren().add(newObstacle);
         scrollPane.setContent(world);
@@ -416,7 +426,11 @@ public class Simulator extends AnimationTimer {
 
         for(BaseRobot robot : robots)
         {
-            robot.addLog(CommandType.POSITION_CHANGE_AUTO, logId);
+            if(robot instanceof  AutoRobot)
+                robot.addLog(CommandType.SAVE_AUTO, logId);
+            else
+                robot.addLog(CommandType.SAVE_MANUAL, logId);
+
         }
     }
 
