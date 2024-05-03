@@ -165,15 +165,6 @@ public class Simulator extends AnimationTimer {
     @Override
     public void handle(long now) 
     {
-//        double deltaTime = (now - lastUpdate) / 1e9;
-//
-//        // normalized delta value, 0.3 to prevent big jump on resume
-//        double val = Math.min(deltaTime, 0.3);
-//
-//        System.out.println("Last:   " + lastUpdate);
-//        System.out.println("Now:    " + now);
-//        System.out.println("Delta:  " + deltaTime);
-
         if(simulatingForward)
         {
             logId++;
@@ -181,6 +172,8 @@ public class Simulator extends AnimationTimer {
             {
                 robot.simulate(logId);
             }
+
+            guiController.setRobotCreatorParams(activeRobot);
         }
         else
         {
@@ -203,7 +196,6 @@ public class Simulator extends AnimationTimer {
             }
         }
 
-//        lastUpdate = now;
     }
 
     public void reverseSimulation()
@@ -267,7 +259,6 @@ public class Simulator extends AnimationTimer {
         robots.add(newRobot);
         // add it to array of robot colliders
         robotColliders.add(newRobot.getSim());
-//        newRobot.addLog(CommandType.START, logId);
 
         // add new robot to the scene
         world.getChildren().addAll(newRobot, newRobot.colliderRect);
@@ -303,7 +294,6 @@ public class Simulator extends AnimationTimer {
         robots.add(newRobot);
         // add it to array of robot colliders
         robotColliders.add(newRobot.getSim());
-//        newRobot.addLog(CommandType.START, logId);
 
         // add new robot to the scene
         world.getChildren().addAll(newRobot, newRobot.colliderRect);
@@ -373,6 +363,8 @@ public class Simulator extends AnimationTimer {
             activeObstacle.unselectObstacle();
         }
 
+        guiController.setObstacleCreatorParams(obstacle);
+
         activeObstacle = obstacle;
         activeObstacle.selectObstacle();
     }
@@ -391,6 +383,8 @@ public class Simulator extends AnimationTimer {
         {
             activeRobot.unselectRobot();
         }
+
+        guiController.setRobotCreatorParams(robot);
 
         if(robot instanceof  ManualRobot)
         {
@@ -459,6 +453,11 @@ public class Simulator extends AnimationTimer {
         return running;
     }
 
+    public Obstacle getActiveObstacle()
+    {
+        return  activeObstacle;
+    }
+
     /**
      * @return Returns active robot if it is manual robot
      */
@@ -510,5 +509,10 @@ public class Simulator extends AnimationTimer {
 
     public int getLogId() {
         return logId;
+    }
+
+    public BaseRobot getActiveRobot()
+    {
+        return activeRobot;
     }
 }

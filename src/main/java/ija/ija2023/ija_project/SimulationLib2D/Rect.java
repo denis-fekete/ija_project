@@ -110,6 +110,9 @@ public class Rect extends Circle {
     public Rect rotate(double angle)
     {
         super.rotate(angle);
+
+        this.rot = angle;
+
         this.updatePoints();
         return this;
     }
@@ -118,8 +121,6 @@ public class Rect extends Circle {
      * Updates single point based on `center` Point
      * @param center Point based on which position will be calculated
      * @param p Pointer to the Point that will be set
-     * @param cosRad Cosine value based on which calculation will be done
-     * @param sinRad Sine value based on which calculation will be done
      */
     protected Point updateSinglePoint(Point center, Point p)
     {
@@ -137,7 +138,6 @@ public class Rect extends Circle {
 
     /**
      * Calculates corners of `rect` Rectangle with no rotation
-     * @param rect Rectangle whose `rect` will be changed
      */
     protected void calculateCornersWithNoRotation()
     {

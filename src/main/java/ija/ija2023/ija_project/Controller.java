@@ -7,10 +7,8 @@
 
 package ija.ija2023.ija_project;
 
-import ija.ija2023.ija_project.JavaSpecific.CommandType;
-import ija.ija2023.ija_project.JavaSpecific.ManualRobot;
-import ija.ija2023.ija_project.JavaSpecific.SaveManager;
-import ija.ija2023.ija_project.JavaSpecific.Simulator;
+import ija.ija2023.ija_project.JavaSpecific.*;
+import ija.ija2023.ija_project.SimulationLib2D.Point;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -268,6 +266,64 @@ public class Controller implements Initializable {
         simulator.deleteRobot();
     }
 
+    @FXML
+    void btn_updateSelectedRobot()
+    {
+        BaseRobot robot = simulator.getActiveRobot();
+        if(robot == null)
+        {
+            return;
+        }
+
+        int turnDirection;
+        if (robotcreator_rot_direction.getValue().equals("Clockwise")) {
+            turnDirection = 1;
+        } else {
+            turnDirection = -1;
+        }
+
+        robot.updateRobotValues(robotcreator_x_pos.getValue(), robotcreator_y_pos.getValue(),
+                robotcreator_radius.getValue(), robotcreator_rotation.getValue(),
+                robotcreator_detection_radius.getValue(), robotcreator_speed.getValue(),
+                robotcreator_rot_speed.getValue(),
+                turnDirection);
+
+        if(robot instanceof  AutoRobot)
+            robot.addLog(CommandType.SAVE_AUTO, simulator.getLogId());
+        else
+            robot.addLog(CommandType.SAVE_MANUAL, simulator.getLogId());
+    }
+
+    @FXML
+    public void setRobotCreatorParams(BaseRobot robot)
+    {
+        if(robot == null)
+        {
+            return;
+        }
+
+        if(robot.getTurnDirection() == 1)
+            robotcreator_rot_direction.setValue("Clockwise");
+        else
+            robotcreator_rot_direction.setValue("Anti-clockwise");
+
+        if(robot instanceof AutoRobot)
+            robotcreator_type.setValue("Automatic");
+        else
+            robotcreator_type.setValue("Manual");
+
+        robotcreator_x_pos.getValueFactory().setValue(robot.getSim().getX());
+        robotcreator_y_pos.getValueFactory().setValue(robot.getSim().getY());
+
+        robotcreator_speed.getValueFactory().setValue(robot.getSpeed());
+
+        robotcreator_radius.getValueFactory().setValue(robot.getSim().getRadius());
+        robotcreator_detection_radius.getValueFactory().setValue(robot.getSim().getDetRadius());
+
+        robotcreator_rotation.getValueFactory().setValue(robot.getSim().getRotation());
+        robotcreator_rot_speed.getValueFactory().setValue(robot.getTurnSpeed());
+    }
+
     // ------------------------------------------------------------------------
 
     @FXML
@@ -331,6 +387,39 @@ public class Controller implements Initializable {
     void btn_deleteObstacle()
     {
         simulator.deleteObstacle();
+    }
+
+    @FXML
+    public void setObstacleCreatorParams(Obstacle obstacle)
+    {
+        if(obstacle == null)
+        {
+            return;
+        }
+
+        obstaclecreator_x_pos.getValueFactory().setValue(obstacle.getSim().getX());
+        obstaclecreator_y_pos.getValueFactory().setValue(obstacle.getSim().getY());
+
+        obstaclecreator_width.getValueFactory().setValue(obstacle.getSim().getWidth());
+        obstaclecreator_height.getValueFactory().setValue(obstacle.getSim().getHeight());
+
+        obstaclecreator_rotation.getValueFactory().setValue(obstacle.getSim().getRotation());
+    }
+
+    @FXML
+    public void btn_updateSelectedObstacle()
+    {
+        Obstacle obstacle = simulator.getActiveObstacle();
+        if(obstacle == null)
+        {
+            return;
+        }
+
+        obstacle.moveObstacleTo(new Point(obstaclecreator_x_pos.getValue(), obstaclecreator_y_pos.getValue()));
+        obstacle.updateObstacleValues(obstaclecreator_x_pos.getValue(), obstaclecreator_y_pos.getValue(),
+                obstaclecreator_rotation.getValue(), obstaclecreator_width.getValue(),
+                obstaclecreator_height.getValue());
+
     }
 
     // ------------------------------------------------------------------------

@@ -236,4 +236,8 @@ public class Robot extends Circle {
     public double getDetRadius() {
         return detRadius;
     }
+
+    public void setDetRadius(double detRadius) {
+        this.detRadius = detRadius;
+    }
 }

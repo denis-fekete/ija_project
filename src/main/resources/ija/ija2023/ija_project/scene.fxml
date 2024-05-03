@@ -150,7 +150,12 @@
                                     <Label prefHeight="17.0" prefWidth="43.0" text="Color" />
                                  </children>
                               </HBox>
-                              <Button id="4" fx:id="obstaclecreator_btn_create" mnemonicParsing="false" onAction="#btn_addObstacle" prefHeight="25.0" prefWidth="108.0" text="Create Obstacle" />
+                              <HBox prefHeight="25.0" prefWidth="200.0" spacing="5.0">
+                                 <children>
+                                    <Button id="4" fx:id="obstaclecreator_btn_create" mnemonicParsing="false" onAction="#btn_addObstacle" prefHeight="25.0" prefWidth="108.0" text="Create Obstacle" />
+                                    <Button id="4" fx:id="obstaclecreator_btn_create1" mnemonicParsing="false" onAction="#btn_updateSelectedObstacle" prefHeight="25.0" prefWidth="108.0" text="Update select" />
+                                 </children>
+                              </HBox>
                               <Button id="4" fx:id="robotcreator_btn_create11" mnemonicParsing="false" onAction="#btn_deleteObstacle" prefHeight="25.0" prefWidth="137.0" text="Delete Active Robot" />
                            </children>
                         </VBox>
@@ -260,7 +265,12 @@
                                     <Label prefHeight="17.0" prefWidth="94.0" text="Type" />
                                  </children>
                               </HBox>
-                              <Button id="4" mnemonicParsing="false" onAction="#btn_addRobot" prefHeight="25.0" prefWidth="98.0" text="Create Robot" />
+                              <HBox prefHeight="25.0" prefWidth="200.0" spacing="5.0">
+                                 <children>
+                                    <Button id="4" mnemonicParsing="false" onAction="#btn_addRobot" prefHeight="25.0" prefWidth="128.0" text="Create Robot" />
+                                    <Button id="4" mnemonicParsing="false" onAction="#btn_updateSelectedRobot" prefHeight="25.0" prefWidth="117.0" text="Update selected" />
+                                 </children>
+                              </HBox>
                               <Button id="4" mnemonicParsing="false" onAction="#btn_deleteRobot" prefHeight="25.0" prefWidth="137.0" text="Delete Active Robot" />
                            </children>
                         </VBox>

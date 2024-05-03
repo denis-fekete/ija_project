@@ -170,6 +170,20 @@ public class Obstacle extends  javafx.scene.shape.Rectangle {
         this.setStrokeWidth(1);
     }
 
+    public void updateObstacleValues(double x, double y,
+                                   double rot, double w, double h)
+    {
+        sim.setRadius(rot);
+        sim.setWidth(w);
+        sim.setHeight(h);
+
+        this.widthProperty().setValue(sim.getWidth());
+        this.heightProperty().setValue(sim.getHeight());
+
+        moveObstacleTo(new Point(x, y));
+        rotateObstacle(rot);
+    }
+
     public void addLog(CommandType type, int logId)
     {
         switch (type)
@@ -191,14 +205,7 @@ public class Obstacle extends  javafx.scene.shape.Rectangle {
 
     public void setParameters(ObstaclePositionSaveCmd cmd)
     {
-        this.sim.setX(cmd.x);
-        this.sim.setY(cmd.y);
-        this.sim.setRotation(cmd.rot);
-        this.sim.setWidth(cmd.w);
-        this.sim.setHeight(cmd.h);
-
-        rotateObstacle(this.sim.getRotation());
-        moveObstacleTo(sim.getPos());
+        updateObstacleValues(cmd.x, cmd.y, cmd.rot, cmd.w, cmd.h);
     }
 
     public void reverseSimulate(int logId)
@@ -209,11 +216,14 @@ public class Obstacle extends  javafx.scene.shape.Rectangle {
             return;
         }
 
-        if (log.get(lastLogIndex).getType() == CommandType.SAVE_OBSTACLE && log.get(lastLogIndex).logId == logId)
+        while (log.get(lastLogIndex).getType() == CommandType.SAVE_OBSTACLE && log.get(lastLogIndex).logId == logId)
         {
             setParameters((ObstaclePositionSaveCmd) log.get(lastLogIndex));
             log.remove(lastLogIndex);
             lastLogIndex--;
+
+            if(lastLogIndex < 0)
+                return;
         }
     }
 }

@@ -303,19 +303,48 @@ public class BaseRobot extends javafx.scene.shape.Circle {
         return turnDirection;
     }
 
+    public void setTurnDirection(int turnDirection) {
+        this.turnDirection = turnDirection;
+    }
+
+    public void updateRobotValues(double x, double y,
+                                  double rad, double rot,
+                                  double detRad, double speed,
+                                  double turnSpeed, int turnDirection)
+    {
+        sim.setRadius(rad);
+        sim.setDetRadius(detRad);
+        this.setSpeed(speed);
+        this.setTurnSpeed(turnSpeed);
+        this.setTurnDirection(turnDirection);
+        sim.setRotation(rot);
+
+        moveRobotTo(new Point(x, y));
+
+        sim.colliderFwd.setHeight(2 * sim.getRadius());
+        sim.colliderFwd.setWidth(sim.getDetRadius());
+        sim.colliderFwd.setX(sim.getX() + sim.getDetRadius() / 2);
+        sim.colliderFwd.setY(sim.getY());
+
+        updateGraphics();
+    }
+
+    public void updateGraphics()
+    {
+        this.radiusProperty().setValue(sim.getRadius());
+
+        colliderRect.widthProperty().set(sim.colliderFwd.getWidth());
+        colliderRect.heightProperty().set(sim.colliderFwd.getHeight());
+
+        moveRobotTo(sim.getPos());
+    }
+
     public void setParameters(AutoRobotPositionSaveCmd cmd)
     {
-        this.sim.setX(cmd.x);
-        this.sim.setY(cmd.y);
-        this.sim.setRotation(cmd.rot);
-        this.sim.setRadius(cmd.radius);
-        this.sim.detRadius = cmd.detectionRadius;
-
-        this.speed = cmd.speed;
-        this.turnDirection = cmd.turnDirection;
-        this.turnSpeed = cmd.turnSpeed;
-
-        rotateRobot(0);
+        updateRobotValues(cmd.x, cmd.y,
+                cmd.radius, cmd.rot,
+                cmd.detectionRadius, cmd.speed,
+                cmd.turnSpeed, cmd.turnDirection);
     }
 
     /**
@@ -361,12 +390,23 @@ public class BaseRobot extends javafx.scene.shape.Circle {
 
     public void reverseSimulate(int logId)
     {
-        // check if logId parameter is same as lastLogIndex,
-        // if yes set last to logId
-        if(log.get(lastLogIndex - 1).logId == logId)
+
+        if(lastLogIndex < 1)
+            return;
+
+        while(log.get(lastLogIndex - 1).logId == logId)
         {
+
+            if(log.get(lastLogIndex - 1).getType() == CommandType.SAVE_AUTO)
+            {
+                setParameters((AutoRobotPositionSaveCmd) log.get(lastLogIndex - 1));
+            }
+
             log.remove(lastLogIndex);
             lastLogIndex--;
+
+            if(lastLogIndex < 1)
+                return;
         }
 
         if(log.get(lastLogIndex).getType() == CommandType.START)
@@ -384,16 +424,6 @@ public class BaseRobot extends javafx.scene.shape.Circle {
                 break;
             case ROTATE_ANTI:
                 rotateRobot(turnSpeed * turnDirection * SMOOTH_CONST);
-                break;
-            case SAVE_AUTO:
-                setParameters((AutoRobotPositionSaveCmd) log.get(lastLogIndex - 1));
-                log.remove(lastLogIndex);
-                lastLogIndex--;
-                break;
-            case SAVE_MANUAL:
-                setParameters((ManualRobotPositionSaveCmd) log.get(lastLogIndex - 1));
-                log.remove(lastLogIndex);
-                lastLogIndex--;
                 break;
         }
     }
