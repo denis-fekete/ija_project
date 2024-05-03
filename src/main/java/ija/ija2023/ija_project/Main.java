@@ -56,7 +56,6 @@ public class Main extends Application {
         // add scroll pane to the root
         root.getChildren().add(simulator.getScrollPane());
         // set scroll pane to be movable by user
-        simulator.getScrollPane().setPannable(true);
 
         // create new scene and put contents of the root into it
         Scene scene = new Scene(root);

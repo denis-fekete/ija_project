@@ -95,6 +95,11 @@ public class Simulator extends AnimationTimer {
      */
     Rectangle worldBorderY;
 
+    boolean simulatingForward;
+
+    int logId;
+
+
     /**
      * Constructor of simulation object that will simulation robot movement
      * and collisions between robots and obstacles
@@ -103,29 +108,30 @@ public class Simulator extends AnimationTimer {
      */
     private Simulator(ScrollPane scrollPane, Controller controller)
     {
+        // initialize arrays
         obstacles = new ArrayList<Obstacle>();
         colliders = new ArrayList<Rect>();
-
         robots = new ArrayList<BaseRobot>();
-
         robotColliders = new ArrayList<Robot>();
 
         activeRobot = null;
         activeObstacle = null;
 
+        // create new pane to which Robots and Obstacles will be added
         this.world = new Pane();
 
+        // scroll pane - for graphical representation with scrollable functions
         this.scrollPane = scrollPane;
+        // for calling methods of GUI
         this.guiController = controller;
 
         lastUpdate = 0;
-
-        running = false;
-
+        logId = 0;
+        running = false; // set simulation running to false
+        // add borderlines
         worldBorderX = new Rectangle(0, 0, 9999, 9999);
-
         worldBorderY = new Rectangle(0, 0, 9999, 9999);
-
+        simulatingForward = true;
     }
 
     /**
@@ -159,20 +165,45 @@ public class Simulator extends AnimationTimer {
     @Override
     public void handle(long now) 
     {
-        double deltaTime = (now - lastUpdate) / 1e9;
+//        double deltaTime = (now - lastUpdate) / 1e9;
+//
+//        // normalized delta value, 0.3 to prevent big jump on resume
+//        double val = Math.min(deltaTime, 0.3);
+//
+//        System.out.println("Last:   " + lastUpdate);
+//        System.out.println("Now:    " + now);
+//        System.out.println("Delta:  " + deltaTime);
 
-
-        // normalized delta value, 0.3 to prevent big jump on resume
-        double val = Math.min(deltaTime, 0.3);
-
-        for(BaseRobot robot : robots)
+        if(simulatingForward)
         {
-            robot.simulate(val);
+            logId++;
+            for(BaseRobot robot : robots)
+            {
+                robot.simulate(logId);
+            }
+        }
+        else
+        {
+            for(BaseRobot robot : robots)
+            {
+                robot.reverseSimulate(logId);
+            }
+            logId--;
+
+            if(logId < 0)
+            {
+                logId = 0;
+                guiController.control_resume_stop();
+            }
         }
 
-        lastUpdate = now;
+//        lastUpdate = now;
     }
 
+    public void reverseSimulation()
+    {
+        simulatingForward = !simulatingForward;
+    }
 
     /**
      * Adds new automatic robot the simulation
@@ -200,6 +231,7 @@ public class Simulator extends AnimationTimer {
         robots.add(newRobot);
         // add it to array of robot colliders
         robotColliders.add(newRobot.getSim());
+        newRobot.addLog(CommandType.START, 0);
 
         // add new robot to the scene
         world.getChildren().addAll(newRobot, newRobot.colliderRect);
@@ -381,6 +413,11 @@ public class Simulator extends AnimationTimer {
     {
         running = false;
         this.stop();
+
+        for(BaseRobot robot : robots)
+        {
+            robot.addLog(CommandType.POSITION_CHANGE_AUTO, logId);
+        }
     }
 
     /**
@@ -450,5 +487,14 @@ public class Simulator extends AnimationTimer {
      */
     public double getSpaceHeight() {
         return spaceHeight;
+    }
+
+    public boolean isSimulatingForward()
+    {
+        return simulatingForward;
+    }
+
+    public int getLogId() {
+        return logId;
     }
 }

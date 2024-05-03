@@ -12,6 +12,7 @@ package ija.ija2023.ija_project.JavaSpecific;
 import ija.ija2023.ija_project.SimulationLib2D.Point;
 import ija.ija2023.ija_project.SimulationLib2D.Rect;
 import ija.ija2023.ija_project.SimulationLib2D.Robot;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
@@ -19,7 +20,6 @@ import javafx.scene.shape.StrokeType;
 import java.util.ArrayList;
 
 public class BaseRobot extends javafx.scene.shape.Circle {
-
     /**
      * Robot object for simulation
      */
@@ -61,6 +61,8 @@ public class BaseRobot extends javafx.scene.shape.Circle {
      */
     int turnDirection;
 
+    static double SMOOTH_CONST = 0.01;
+
     /**
      * Array of obstacles that robot can collide with
      */
@@ -70,6 +72,14 @@ public class BaseRobot extends javafx.scene.shape.Circle {
      * Array of other robots that robot can collide with
      */
     ArrayList<Robot> robotColliders;
+
+    CommandType lastCommand;
+
+    CommandType reverseLastCommand;
+
+    ArrayList<Command> log;
+
+    int lastLogIndex;
 
     /**
      * Constructor of BaseRobot object
@@ -106,6 +116,11 @@ public class BaseRobot extends javafx.scene.shape.Circle {
         this.highlightedColor = Color.color(Math.min(color.getRed() + 0.15, 0.93),
                 Math.min(color.getBlue() + 0.15, 0.93),
                 Math.min(color.getGreen() + 0.15, 0.93));
+
+        this.log = new ArrayList<Command>();
+        lastCommand = CommandType.NONE;
+        reverseLastCommand = CommandType.NONE;
+        lastLogIndex = -1;
     }
 
     /**
@@ -153,6 +168,14 @@ public class BaseRobot extends javafx.scene.shape.Circle {
                 this.moveRobotTo(new Point(cords.getX(), cords.getY()));
             }
         });
+
+//        this.setOnMouseReleased(mouseDragEvent -> {
+//            if(simulator.isSimulatingForward())
+//            {
+//                this.addLog(CommandType.POSITION_CHANGE_AUTO,
+//                        simulator.getLogId());
+//            }
+//        });
     }
 
     /**
@@ -199,11 +222,6 @@ public class BaseRobot extends javafx.scene.shape.Circle {
         this.colliderRect.setY(sim.colliderFwd.getY() - sim.colliderFwd.getHeight() / 2);
         this.colliderRect.setRotate(sim.getRotation());
     }
-
-    /**
-     * Simulates one simulation cycle of robot
-     */
-    public void simulate(double deltaTime) {}
 
     /**
      * Returns objects on simulation layer (Robot object), that calculates
@@ -285,5 +303,59 @@ public class BaseRobot extends javafx.scene.shape.Circle {
      */
     public int getTurnDirection() {
         return turnDirection;
+    }
+
+    public void setParameters(UnpauseCommandAuto cmd)
+    {
+        this.sim.setX(cmd.x);
+        this.sim.setY(cmd.y);
+        this.sim.setRotation(cmd.rot);
+        this.sim.setRadius(cmd.radius);
+        this.sim.detRadius = cmd.detectionRadius;
+
+        this.speed = cmd.speed;
+        this.turnDirection = cmd.turnDirection;
+        this.turnSpeed = cmd.turnSpeed;
+
+        rotateRobot(0);
+    }
+
+    /**
+     * Simulates one simulation cycle of robot
+     */
+    public void simulate(int logId) {}
+
+    public void reverseSimulate(int logId) {}
+
+    public void addLog(CommandType type, int logId)
+    {
+        switch (type)
+        {
+            case MOVE:
+                log.add(new SimulationCommand(CommandType.MOVE, logId));
+                lastCommand = CommandType.MOVE;
+                break;
+            case ROTATE:
+                log.add(new SimulationCommand(CommandType.ROTATE, logId));
+                lastCommand = CommandType.ROTATE;
+                break;
+            case POSITION_CHANGE_AUTO:
+                log.add(new UnpauseCommandAuto(this, logId));
+                lastCommand = CommandType.POSITION_CHANGE_AUTO;
+                break;
+            case POSITION_CHANGE_MANUAL:
+                log.add(new UnpauseCommandManual(this, logId));
+                lastCommand = CommandType.POSITION_CHANGE_MANUAL;
+                break;
+            case PAUSE:
+                log.add(new SimulationCommand(CommandType.PAUSE, logId));
+                break;
+            case START:
+                log.add(new SimulationCommand(CommandType.START, logId));
+                break;
+        }
+
+        System.out.println("Added log: " + type);
+        lastLogIndex = Math.max(log.size() - 1, 0);
     }
 }

@@ -78,16 +78,58 @@ public class AutoRobot extends BaseRobot {
      * One simulation cycle
      * @param deltaTime Time between frames
      */
-    public void simulate(double deltaTime)
+    public void simulate(int logId)
     {
         if(sim.obstacleDetection(colliders) || sim.robotDetection(robotColliders) || isOutside())
         {
-            rotateRobot(turnSpeed * turnDirection * deltaTime);
+            rotateRobot(turnSpeed * turnDirection * SMOOTH_CONST);
+
+            if(lastCommand != CommandType.ROTATE)
+            {
+                addLog(CommandType.ROTATE, logId);
+            }
         }
         else
         {
-            moveRobot(deltaTime * speed);
+            moveRobot(speed * SMOOTH_CONST);
+
+            if(lastCommand != CommandType.MOVE)
+            {
+                addLog(CommandType.MOVE, logId);
+            }
         }
     }
 
+    public void reverseSimulate(int logId)
+    {
+        // check if logId parameter is same as lastLogIndex,
+        // if yes set last to logId
+        if(log.get(lastLogIndex - 1).logId == logId)
+        {
+            log.remove(lastLogIndex);
+            lastLogIndex--;
+        }
+
+        if(log.get(lastLogIndex).getType() == CommandType.START)
+        {
+            return;
+        }
+
+        switch (log.get(lastLogIndex - 1).getType())
+        {
+            case MOVE:
+                moveRobot(-speed * SMOOTH_CONST);
+                break;
+            case ROTATE:
+                rotateRobot(turnSpeed * turnDirection * SMOOTH_CONST * (-1));
+                break;
+            case POSITION_CHANGE_AUTO:
+                setParameters((UnpauseCommandAuto) log.get(lastLogIndex - 1));
+                log.remove(lastLogIndex);
+                lastLogIndex--;
+                break;
+            case POSITION_CHANGE_MANUAL:
+                break;
+        }
+    }
 }

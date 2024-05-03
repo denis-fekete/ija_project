@@ -138,6 +138,9 @@ public class Controller implements Initializable {
     @FXML
     private Button control_btn_resume_stop;
 
+    @FXML
+    private Button history_btn_reverse;
+
     // ------------------------------------------------------------------------
 
 
@@ -269,11 +272,21 @@ public class Controller implements Initializable {
     @FXML
     void btn_revertSimulation()
     {
-
+        if(simulator.isSimulatingForward())
+        {
+            simulator.reverseSimulation();
+            history_btn_reverse.setText("Continue simulation from this point");
+        }
+        else
+        {
+            history_btn_reverse.setText("Reverse simulation");
+            simulator.reverseSimulation();
+            control_resume_stop();
+        }
     }
 
     @FXML
-    void control_resume_stop()
+    public  void control_resume_stop()
     {
         if(simulator.isRunnning())
         {

@@ -105,7 +105,7 @@ public class ManualRobot extends BaseRobot {
      * One simulation cycle
      * @param deltaTime Time between frames
      */
-    public void simulate(double deltaTime)
+    public void simulate(double deltaTime, long logId)
     {
         if(spinClockwise)
         {
@@ -177,7 +177,5 @@ public class ManualRobot extends BaseRobot {
     public double getDesiredAngle() {
         return desiredAngle;
     }
-
-
 }
 
