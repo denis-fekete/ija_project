@@ -169,7 +169,7 @@ public class ManualRobot extends BaseRobot {
             log.remove(lastLogIndex);
             lastLogIndex--;
 
-            if(lastLogIndex  < 0)
+            if(lastLogIndex < 0)
                 return;
         }
     }

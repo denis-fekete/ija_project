@@ -209,15 +209,11 @@ public class Obstacle extends  javafx.scene.shape.Rectangle {
             return;
         }
 
-        if(log.get(lastLogIndex).logId == logId)
-        {
-            log.remove(lastLogIndex);
-            lastLogIndex--;
-        }
-
-        if (log.get(lastLogIndex).getType() == CommandType.SAVE_OBSTACLE)
+        if (log.get(lastLogIndex).getType() == CommandType.SAVE_OBSTACLE && log.get(lastLogIndex).logId == logId)
         {
             setParameters((ObstaclePositionSaveCmd) log.get(lastLogIndex));
+            log.remove(lastLogIndex);
+            lastLogIndex--;
         }
     }
 }
