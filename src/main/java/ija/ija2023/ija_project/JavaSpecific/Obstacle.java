@@ -89,7 +89,7 @@ public class Obstacle extends  javafx.scene.shape.Rectangle {
     {
         Obstacle newObstacle = new Obstacle(x, y, w, h, rot, color, simulator);
         newObstacle.setFill(color);
-        newObstacle.rotateObstacle(0);
+        newObstacle.rotateObstacle(rot);
         newObstacle.moveObstacleTo(newObstacle.sim.getPos());
         // robot main body is 3, robot collider is 1
         newObstacle.setViewOrder(2.0);
