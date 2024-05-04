@@ -31,10 +31,6 @@ public class Circle extends Point{
 
     /**
      * Circle constructor
-     * @param x Center x position of the Circle
-     * @param y Center y position of the Circle
-     * @param radius Radius of the Circle
-     * @param rot Rotation angle of the circle
      */
     public Circle()
     {
@@ -101,7 +97,6 @@ public class Circle extends Point{
     
     /**
      * Updates stored cosRad and sinRad values
-     * @return 
      */
     protected void calculateSinCos()
     {

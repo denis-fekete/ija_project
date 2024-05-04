@@ -10,11 +10,11 @@
   <name>ija_project</name>
 
   <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <junit.version>5.10.0</junit.version>
-    <maven.compiler.source>17</maven.compiler.source>
-    <maven.compiler.target>17</maven.compiler.target>
-    <maven.shade.version>3.5.3</maven.shade.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <junit.version>5.10.0</junit.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <maven.shade.version>3.5.3</maven.shade.version>
   </properties>
 
   <dependencies>
@@ -72,6 +72,16 @@
           </executions>
       </plugin>
 
+    <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.6.2</version>
+        <configuration>
+            <source>1.8</source>
+            <target>1.8</target>
+            <additionalparam>-Xdoclint:none</additionalparam>
+        </configuration>
+    </plugin>
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -92,6 +102,7 @@
           </archive>
         </configuration>
       </plugin>
+
       <plugin>
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-maven-plugin</artifactId>
