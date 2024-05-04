@@ -156,7 +156,7 @@
                                     <Button id="4" fx:id="obstaclecreator_btn_create1" mnemonicParsing="false" onAction="#btn_updateSelectedObstacle" prefHeight="25.0" prefWidth="108.0" text="Update select" />
                                  </children>
                               </HBox>
-                              <Button id="4" fx:id="robotcreator_btn_create11" mnemonicParsing="false" onAction="#btn_deleteObstacle" prefHeight="25.0" prefWidth="137.0" text="Delete Active Robot" />
+                              <Button id="4" fx:id="robotcreator_btn_create11" mnemonicParsing="false" onAction="#btn_deleteObstacle" prefHeight="25.0" prefWidth="137.0" text="Delete Active Obstacle" />
                            </children>
                         </VBox>
                      </children>
@@ -307,10 +307,6 @@
             </TitledPane>
         </panes>
       </Accordion>
-      <HBox fx:id="timeMenu" prefHeight="30.0" prefWidth="240.0">
-         <children>
-            <Button fx:id="control_btn_resume_stop" mnemonicParsing="false" onAction="#control_resume_stop" prefHeight="25.0" prefWidth="86.0" text="Start" />
-         </children>
-      </HBox>
+      <Button fx:id="control_btn_resume_stop" mnemonicParsing="false" onAction="#control_resume_stop" prefHeight="31.0" prefWidth="86.0" text="Start" />
    </children>
 </Pane>

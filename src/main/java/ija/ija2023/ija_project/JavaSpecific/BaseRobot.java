@@ -303,10 +303,25 @@ public class BaseRobot extends javafx.scene.shape.Circle {
         return turnDirection;
     }
 
+    /**
+     * Sets turn direction of robot
+     * @param turnDirection New values
+     */
     public void setTurnDirection(int turnDirection) {
         this.turnDirection = turnDirection;
     }
 
+    /**
+     * Updates robot values based on provided values
+     * @param x New x position of robot
+     * @param y New y position of robot
+     * @param rad New radius of robot
+     * @param rot New rotation of robot
+     * @param detRad New detection radius of robot
+     * @param speed New speed of robot
+     * @param turnSpeed New turn speed of robot
+     * @param turnDirection New turn direction of robot
+     */
     public void updateRobotValues(double x, double y,
                                   double rad, double rot,
                                   double detRad, double speed,
@@ -329,6 +344,9 @@ public class BaseRobot extends javafx.scene.shape.Circle {
         updateGraphics();
     }
 
+    /**
+     * Updates graphics of robot
+     */
     public void updateGraphics()
     {
         this.radiusProperty().setValue(sim.getRadius());
@@ -339,6 +357,10 @@ public class BaseRobot extends javafx.scene.shape.Circle {
         moveRobotTo(sim.getPos());
     }
 
+    /**
+     * Sets parameters from Command into current Robot
+     * @param cmd Command from which values will be taken from
+     */
     public void setParameters(AutoRobotPositionSaveCmd cmd)
     {
         updateRobotValues(cmd.x, cmd.y,
@@ -352,6 +374,11 @@ public class BaseRobot extends javafx.scene.shape.Circle {
      */
     public void simulate(int logId) {}
 
+    /**
+     * Adds new log into array of logs for reverse simulating
+     * @param type Type of log to be added
+     * @param logId Current log ID in simulation
+     */
     public void addLog(CommandType type, int logId)
     {
         switch (type)
@@ -387,6 +414,11 @@ public class BaseRobot extends javafx.scene.shape.Circle {
         lastLogIndex = Math.max(log.size() - 1, 0);
     }
 
+    /**
+     * Method that gets called instead of simulate() when simulation is in
+     * reverse mode
+     * @param logId Log id that should "reverse" simulate
+     */
     public void reverseSimulate(int logId)
     {
 

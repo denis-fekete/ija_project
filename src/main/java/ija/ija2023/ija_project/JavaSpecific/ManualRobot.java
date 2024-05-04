@@ -139,6 +139,10 @@ public class ManualRobot extends BaseRobot {
         }
     }
 
+    /**
+     * Sets parameters from Command into current Robot
+     * @param cmd Command from which values will be taken from
+     */
     public void setParameters(ManualRobotPositionSaveCmd cmd)
     {
         super.setParameters(cmd);
@@ -151,6 +155,11 @@ public class ManualRobot extends BaseRobot {
         moveRobotTo(sim.getPos());
     }
 
+    /**
+     * Method that gets called instead of simulate() when simulation is in
+     * reverse mode
+     * @param logId Log id that should "reverse" simulate
+     */
     public void reverseSimulate(int logId)
     {
         if(lastLogIndex < 0)

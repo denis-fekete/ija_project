@@ -233,10 +233,17 @@ public class Robot extends Circle {
         return false;
     }
 
+    /**
+     * @return Returns detection radius of the Robot
+     */
     public double getDetRadius() {
         return detRadius;
     }
 
+    /**
+     * Sets detection radius of robot
+     * @param detRadius New value
+     */
     public void setDetRadius(double detRadius) {
         this.detRadius = detRadius;
     }

@@ -35,112 +35,63 @@ public class Controller implements Initializable {
      */
     SaveManager saveManager;
 
+
     @FXML
-    private HBox timeMenu;
+    private ScrollPane simulationSpace;
+
+
+    // ------------------------------------------------------------------------
+    // Other
+    // ------------------------------------------------------------------------
 
     @FXML // fx:id="controlMenu"
     private Accordion controlMenu;
-
-    @FXML // fx:id="simulationSpace"
-    private ScrollPane simulationSpace; // Value injected by FXMLLoader
-
-    // ------------------------------------------------------------------------
-
-    @FXML // fx:id="obstaclecreator_btn_create"
-    private Button obstaclecreator_btn_create; // Value injected by FXMLLoader
-
-    @FXML // fx:id="obstaclecreator_color"
-    private ColorPicker obstaclecreator_color; // Value injected by FXMLLoader
-
-    @FXML // fx:id="obstaclecreator_height"
-    private Spinner<Double> obstaclecreator_height; // Value injected by FXMLLoader
-
-    @FXML // fx:id="obstaclecreator_rotation"
-    private Spinner<Double> obstaclecreator_rotation; // Value injected by FXMLLoader
-
-    @FXML // fx:id="obstaclecreator_width"
-    private Spinner<Double> obstaclecreator_width; // Value injected by FXMLLoader
-
-    @FXML // fx:id="obstaclecreator_x_pos"
-    private Spinner<Double> obstaclecreator_x_pos; // Value injected by FXMLLoader
-
-    @FXML // fx:id="obstaclecreator_y_pos"
-    private Spinner<Double> obstaclecreator_y_pos; // Value injected by FXMLLoader
-
-    // ------------------------------------------------------------------------
-
-    @FXML // fx:id="robotcreator_color"
-    private ColorPicker robotcreator_color; // Value injected by FXMLLoader
-
-    @FXML // fx:id="robotcreator_default_rot"
-    private Spinner<Double> robotcreator_rotation; // Value injected by FXMLLoader
-
-    @FXML // fx:id="robotcreator_detection_radius"
-    private Spinner<Double> robotcreator_detection_radius; // Value injected by FXMLLoader
-
-    @FXML // fx:id="robotcreator_radius"
-    private Spinner<Double> robotcreator_radius; // Value injected by FXMLLoader
-
-    @FXML // fx:id="robotcreator_rot_direction"
-    private ChoiceBox<String> robotcreator_rot_direction; // Value injected by FXMLLoader
-
-    @FXML // fx:id="robotcreator_rot_speed"
-    private Spinner<Double> robotcreator_rot_speed; // Value injected by FXMLLoader
-
-    @FXML // fx:id="robotcreator_speed"
-    private Spinner<Double> robotcreator_speed; // Value injected by FXMLLoader
-
-    @FXML // fx:id="robotcreator_type"
-    private ChoiceBox<String> robotcreator_type; // Value injected by FXMLLoader
-
-    @FXML // fx:id="robotcreator_x_pos"
-    private Spinner<Double> robotcreator_x_pos; // Value injected by FXMLLoader
-
-    @FXML // fx:id="robotcreator_y_pos"
-    private Spinner<Double> robotcreator_y_pos; // Value injected by FXMLLoader
-
-    // ------------------------------------------------------------------------
-
-    @FXML // fx:id="robotmove_desired_angle"
-    private Slider robotmove_desired_angle; // Value injected by FXMLLoader
-
-    @FXML // fx:id="robotmove_spin_anticlockwise"
-    private ToggleButton robotmove_spin_anticlockwise; // Value injected by FXMLLoader
-
-    @FXML // fx:id="robotmove_spin_clockwise"
-    private ToggleButton robotmove_spin_clockwise; // Value injected by FXMLLoader
-
-    @FXML // fx:id="robotmove_rotation_speed"
-    private Spinner<Double> robotmove_rotation_speed; // Value injected by FXMLLoader
-
-    @FXML // fx:id="robotmove_speedmax"
-    private Spinner<Double> robotmove_speedmax; // Value injected by FXMLLoader
-
-    @FXML // fx:id="robotmove_speedslider"
-    private Slider robotmove_speedslider; // Value injected by FXMLLoader
-
-    @FXML // fx:id="world_size_x"
-    private Spinner<Double> world_size_x; // Value injected by FXMLLoader
-
-    @FXML // fx:id="world_size_y"
-    private Spinner<Double> world_size_y; // Value injected by FXMLLoader
-
-    @FXML
-    private AnchorPane robotcreator_parentPane;
-
-    @FXML
-    private AnchorPane obstaclecreator_parentPane;
-
-    @FXML
-    private AnchorPane world_parentPane;
 
     @FXML
     private Button control_btn_resume_stop;
 
     @FXML
-    private Button history_btn_reverse;
+    void btn_revertSimulation()
+    {
+        if(simulator.isSimulatingForward())
+        {
+            simulator.reverseSimulation();
+            history_btn_reverse.setText("Continue simulation from this point");
+        }
+        else
+        {
+            history_btn_reverse.setText("Reverse simulation");
+            simulator.reverseSimulation();
+            control_resume_stop();
+        }
+    }
 
-    // ------------------------------------------------------------------------
+    @FXML
+    public  void control_resume_stop()
+    {
+        if(simulator.isRunnning())
+        {
+            simulator.pauseSimulation();
+
+            // enable menus
+            robotcreator_parentPane.setDisable(false);
+            world_parentPane.setDisable(false);
+            obstaclecreator_parentPane.setDisable(false);
+
+            control_btn_resume_stop.setText("Resume");
+        }
+        else
+        {
+            simulator.resumeSimulation();
+
+            // disable other menus
+            robotcreator_parentPane.setDisable(true);
+            world_parentPane.setDisable(true);
+            obstaclecreator_parentPane.setDisable(true);
+
+            control_btn_resume_stop.setText("Pause");
+        }
+    }
 
 
     public void setMainWindowStage(Stage mainWindowStage) {
@@ -220,12 +171,50 @@ public class Controller implements Initializable {
         if(height != null)
         {
             // 3*20 is size of collapsed panes in menu bar
-            controlMenu.setPrefHeight(height.doubleValue() - timeMenu.getPrefHeight()  - (3*13));
+            controlMenu.setPrefHeight(height.doubleValue() - control_btn_resume_stop.getPrefHeight()  - (3*13));
             simulationSpace.setPrefHeight(height.doubleValue());
         }
     }
 
+
+
     // ------------------------------------------------------------------------
+    // Robot creator menu
+    // ------------------------------------------------------------------------
+
+    @FXML
+    private ColorPicker robotcreator_color;
+
+    @FXML 
+    private Spinner<Double> robotcreator_rotation;
+
+    @FXML 
+    private Spinner<Double> robotcreator_detection_radius;
+
+    @FXML
+    private Spinner<Double> robotcreator_radius;
+
+    @FXML
+    private ChoiceBox<String> robotcreator_rot_direction;
+
+    @FXML
+    private Spinner<Double> robotcreator_rot_speed;
+
+    @FXML
+    private Spinner<Double> robotcreator_speed;
+
+    @FXML
+    private ChoiceBox<String> robotcreator_type;
+
+    @FXML
+    private Spinner<Double> robotcreator_x_pos;
+
+    @FXML
+    private Spinner<Double> robotcreator_y_pos;
+
+    @FXML
+    private AnchorPane robotcreator_parentPane;
+
 
     @FXML
     void btn_addRobot(ActionEvent event) {
@@ -324,52 +313,35 @@ public class Controller implements Initializable {
         robotcreator_rot_speed.getValueFactory().setValue(robot.getTurnSpeed());
     }
 
+
+
+    // ------------------------------------------------------------------------
+    // Obstacle creator menu
     // ------------------------------------------------------------------------
 
     @FXML
-    void btn_revertSimulation()
-    {
-        if(simulator.isSimulatingForward())
-        {
-            simulator.reverseSimulation();
-            history_btn_reverse.setText("Continue simulation from this point");
-        }
-        else
-        {
-            history_btn_reverse.setText("Reverse simulation");
-            simulator.reverseSimulation();
-            control_resume_stop();
-        }
-    }
+    private Button obstaclecreator_btn_create;
 
     @FXML
-    public  void control_resume_stop()
-    {
-        if(simulator.isRunnning())
-        {
-            simulator.pauseSimulation();
+    private ColorPicker obstaclecreator_color; 
 
-            // enable menus
-            robotcreator_parentPane.setDisable(false);
-            world_parentPane.setDisable(false);
-            obstaclecreator_parentPane.setDisable(false);
+    @FXML
+    private Spinner<Double> obstaclecreator_height; 
 
-            control_btn_resume_stop.setText("Resume");
-        }
-        else
-        {
-            simulator.resumeSimulation();
+    @FXML
+    private Spinner<Double> obstaclecreator_rotation; 
 
-            // disable other menus
-            robotcreator_parentPane.setDisable(true);
-            world_parentPane.setDisable(true);
-            obstaclecreator_parentPane.setDisable(true);
+    @FXML
+    private Spinner<Double> obstaclecreator_width; 
 
-            control_btn_resume_stop.setText("Pause");
-        }
-    }
+    @FXML
+    private Spinner<Double> obstaclecreator_x_pos; 
 
-    // ------------------------------------------------------------------------
+    @FXML
+    private Spinner<Double> obstaclecreator_y_pos; 
+
+    @FXML
+    private AnchorPane obstaclecreator_parentPane;
 
     @FXML
     void btn_addObstacle(ActionEvent event) {
@@ -422,7 +394,29 @@ public class Controller implements Initializable {
 
     }
 
+
+
     // ------------------------------------------------------------------------
+    // Robot move menu
+    // ------------------------------------------------------------------------
+
+    @FXML
+    private Slider robotmove_desired_angle; 
+
+    @FXML
+    private ToggleButton robotmove_spin_anticlockwise; 
+
+    @FXML
+    private ToggleButton robotmove_spin_clockwise; 
+
+    @FXML
+    private Spinner<Double> robotmove_rotation_speed; 
+
+    @FXML
+    private Spinner<Double> robotmove_speedmax; 
+
+    @FXML
+    private Slider robotmove_speedslider; 
 
     public void setManualRobotParams(ManualRobot robot)
     {
@@ -544,6 +538,21 @@ public class Controller implements Initializable {
     }
 
     // ------------------------------------------------------------------------
+    // World menu
+    // ------------------------------------------------------------------------
+
+
+    @FXML
+    private Spinner<Double> world_size_x; 
+
+    @FXML
+    private Spinner<Double> world_size_y; 
+
+    @FXML
+    private AnchorPane world_parentPane;
+
+    @FXML
+    private Button history_btn_reverse;
 
     @FXML
     public void world_apply_world_border()

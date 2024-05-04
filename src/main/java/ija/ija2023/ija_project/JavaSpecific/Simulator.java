@@ -76,7 +76,7 @@ public class Simulator extends AnimationTimer {
     ScrollPane scrollPane;
 
     /**
-     *
+     * Reference to the Controller for interacting with GUI
      */
     Controller guiController;
 
@@ -95,8 +95,16 @@ public class Simulator extends AnimationTimer {
      */
     Rectangle worldBorderY;
 
+    /**
+     * Boolean value whenever simulation is going forward or is
+     * being reverted
+     */
     boolean simulatingForward;
 
+    /**
+     * Log value for logging, Robots and Obstacles use this value for
+     * reverting simulation
+     */
     int logId;
 
 
@@ -198,6 +206,9 @@ public class Simulator extends AnimationTimer {
 
     }
 
+    /**
+     * Reverses simulation, used for reverting simulation
+     */
     public void reverseSimulation()
     {
         simulatingForward = !simulatingForward;
@@ -502,15 +513,24 @@ public class Simulator extends AnimationTimer {
         return spaceHeight;
     }
 
+    /**
+     * @return Returns true if simulation is simulating in forward direction
+     */
     public boolean isSimulatingForward()
     {
         return simulatingForward;
     }
 
+    /**
+     * @return Returns current log ID
+     */
     public int getLogId() {
         return logId;
     }
 
+    /**
+     * @return Returns active robot
+     */
     public BaseRobot getActiveRobot()
     {
         return activeRobot;

@@ -170,6 +170,14 @@ public class Obstacle extends  javafx.scene.shape.Rectangle {
         this.setStrokeWidth(1);
     }
 
+    /**
+     * Updates values of Obstacle
+     * @param x New x position of Obstacle
+     * @param y New y position of Obstacle
+     * @param rot New rotation of Obstacle
+     * @param w New width of rotation
+     * @param h New height of rotation
+     */
     public void updateObstacleValues(double x, double y,
                                    double rot, double w, double h)
     {
@@ -184,6 +192,11 @@ public class Obstacle extends  javafx.scene.shape.Rectangle {
         rotateObstacle(rot);
     }
 
+    /**
+     * Adds new log into array of logs for reverse simulating
+     * @param type Type of log to be added
+     * @param logId Current log ID in simulation
+     */
     public void addLog(CommandType type, int logId)
     {
         switch (type)
@@ -202,11 +215,19 @@ public class Obstacle extends  javafx.scene.shape.Rectangle {
         lastLogIndex = Math.max(log.size() - 1, 0);
     }
 
+    /**
+     * Sets parameters from Command into current Obstacle
+     * @param cmd Command from which values will be taken from
+     */
     public void setParameters(ObstaclePositionSaveCmd cmd)
     {
         updateObstacleValues(cmd.x, cmd.y, cmd.rot, cmd.w, cmd.h);
     }
 
+    /**
+     * Method that gets called when simulation is in reverse mode
+     * @param logId Log id that should "reverse" simulate
+     */
     public void reverseSimulate(int logId)
     {
 

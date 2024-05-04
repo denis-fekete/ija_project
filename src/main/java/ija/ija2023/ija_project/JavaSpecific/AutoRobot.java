@@ -75,8 +75,8 @@ public class AutoRobot extends BaseRobot {
     }
 
     /**
-     * One simulation cycle
-     * @param deltaTime Time between frames
+     * One simulation cycle of robot, controlling collisions and moving according
+     * @param logId Log id of simulation (for logging and reversing simulation)
      */
     public void simulate(int logId)
     {
