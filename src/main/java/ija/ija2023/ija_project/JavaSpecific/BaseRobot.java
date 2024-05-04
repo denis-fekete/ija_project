@@ -384,7 +384,6 @@ public class BaseRobot extends javafx.scene.shape.Circle {
                 break;
         }
 
-        System.out.println("Added log: " + type);
         lastLogIndex = Math.max(log.size() - 1, 0);
     }
 

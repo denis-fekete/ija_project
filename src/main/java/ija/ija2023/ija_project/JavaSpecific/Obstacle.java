@@ -200,7 +200,6 @@ public class Obstacle extends  javafx.scene.shape.Rectangle {
         }
 
         lastLogIndex = Math.max(log.size() - 1, 0);
-        System.out.println("Obstacle added log: " + type);
     }
 
     public void setParameters(ObstaclePositionSaveCmd cmd)
