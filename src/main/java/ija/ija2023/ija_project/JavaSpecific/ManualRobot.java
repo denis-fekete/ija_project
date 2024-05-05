@@ -7,9 +7,12 @@
 
 package ija.ija2023.ija_project.JavaSpecific;
 
+import ija.ija2023.ija_project.SimulationLib2D.Point;
 import ija.ija2023.ija_project.SimulationLib2D.Rect;
 import ija.ija2023.ija_project.SimulationLib2D.Robot;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+
 import java.util.ArrayList;
 
 public class ManualRobot extends BaseRobot {
@@ -27,6 +30,8 @@ public class ManualRobot extends BaseRobot {
      * Turn that robot will try get rotate to by turnSpeed (field in BaseRobot)
      */
     double desiredAngle;
+
+    Circle gphxSign;
 
     /**
      * Constructor of BaseRobot object
@@ -60,6 +65,7 @@ public class ManualRobot extends BaseRobot {
         this.spinClockwise = spinClockwise;
         this.spinAnticlockwise = spinAnticlockwise;
         this.desiredAngle = desiredAngle;
+        this.gphxSign = new Circle(x, y, radius / 2);
     }
 
     /**
@@ -96,7 +102,13 @@ public class ManualRobot extends BaseRobot {
                 spinClockwise, spinAnticlockwise, desiredAngle,
                 obstacles, robotColliders, simulator);
 
+        // initialize values
         newRobot.initialize();
+
+        // add "graphical sign" for differentiating between manual and automatic robots
+        newRobot.gphxSign.setFill(null);
+        newRobot.gphxSign.setStroke(Color.WHITE);
+        newRobot.gphxSign.setStrokeWidth(2);
 
         newRobot.setOnMousePressed(mouseEvent -> {
             if(simulator.isPaused() && simulator.isSimulatingForward())
@@ -106,6 +118,32 @@ public class ManualRobot extends BaseRobot {
         });
 
         return newRobot;
+    }
+
+    /**
+     * Moves simulation and graphical representation of the robot in forward
+     * direction by distance
+     * @param distance Distance that robot will be moved by
+     */
+    @Override
+    public void moveRobot(double distance)
+    {
+        super.moveRobot(distance);
+
+        this.gphxSign.setCenterX(sim.getX());
+        this.gphxSign.setCenterY(sim.getY());
+    }
+
+    /**
+     * Updates graphics of robot
+     */
+    @Override
+    public void moveRobotTo(Point p)
+    {
+        super.moveRobotTo(p);
+
+        this.gphxSign.setCenterX(sim.getX());
+        this.gphxSign.setCenterY(sim.getY());
     }
 
     /**

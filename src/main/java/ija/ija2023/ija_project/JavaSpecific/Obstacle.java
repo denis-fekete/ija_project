@@ -11,11 +11,12 @@ package ija.ija2023.ija_project.JavaSpecific;
 import ija.ija2023.ija_project.SimulationLib2D.Rect;
 import ija.ija2023.ija_project.SimulationLib2D.Point;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 
 import java.util.ArrayList;
 
-public class Obstacle extends  javafx.scene.shape.Rectangle {
+public class Obstacle extends Rectangle {
 
     /**
      * Rect object for simulation
@@ -99,7 +100,6 @@ public class Obstacle extends  javafx.scene.shape.Rectangle {
 
             if(simulator.isPaused() && simulator.isSimulatingForward())
             {
-
                 newObstacle.addLog(CommandType.SAVE_OBSTACLE, simulator.getLogId());
             }
         });

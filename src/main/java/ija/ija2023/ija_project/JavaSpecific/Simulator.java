@@ -272,7 +272,7 @@ public class Simulator extends AnimationTimer {
         robotColliders.add(newRobot.getSim());
 
         // add new robot to the scene
-        world.getChildren().addAll(newRobot, newRobot.colliderRect);
+        world.getChildren().addAll(newRobot, newRobot.colliderRect, newRobot.gphxSign);
         scrollPane.setContent(world);
     }
 
@@ -307,7 +307,7 @@ public class Simulator extends AnimationTimer {
         robotColliders.add(newRobot.getSim());
 
         // add new robot to the scene
-        world.getChildren().addAll(newRobot, newRobot.colliderRect);
+        world.getChildren().addAll(newRobot, newRobot.colliderRect, newRobot.gphxSign);
         scrollPane.setContent(world);
     }
 
@@ -358,6 +358,10 @@ public class Simulator extends AnimationTimer {
         {
             world.getChildren().removeAll(activeRobot, activeRobot.colliderRect);
 
+            if(activeRobot instanceof  ManualRobot)
+            {
+                world.getChildren().removeAll(((ManualRobot)activeRobot).gphxSign);
+            }
             robots.remove(activeRobot);
             activeRobot = null;
         }

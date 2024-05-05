@@ -341,14 +341,6 @@ public class BaseRobot extends javafx.scene.shape.Circle {
         sim.colliderFwd.setX(sim.getX() + sim.getDetRadius() / 2);
         sim.colliderFwd.setY(sim.getY());
 
-        updateGraphics();
-    }
-
-    /**
-     * Updates graphics of robot
-     */
-    public void updateGraphics()
-    {
         this.radiusProperty().setValue(sim.getRadius());
 
         colliderRect.widthProperty().set(sim.colliderFwd.getWidth());
