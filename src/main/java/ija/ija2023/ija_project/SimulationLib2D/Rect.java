@@ -4,6 +4,9 @@
  * definition for moving and rotating object with respect to its center.
  * Also holds implementation of collision detection between other rectangles
  *
+ * Source for rectangle collision:
+ * https://www.geeksforgeeks.org/check-if-two-given-line-segments-intersect/
+ *
  * @author Denis Fekete (xfeket01@fit.vutbr.cz)
  */
 

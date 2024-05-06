@@ -5,6 +5,9 @@
  * array of all Rectangles that Robot can collide with. Robot also contains
  * collider that is used for collision detection.
  *
+ * Source line circle intersect:
+ * https://www.youtube.com/watch?v=ebq7L2Wtbl4
+ * 
  * @author Denis Fekete (xfeket01@fit.vutbr.cz)
  */
 
