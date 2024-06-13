@@ -188,6 +188,9 @@ public class Obstacle extends Rectangle {
         this.widthProperty().setValue(sim.getWidth());
         this.heightProperty().setValue(sim.getHeight());
 
+//  Patched, not part of submitted version
+//        sim.setRadius(Math.sqrt( (sim.getWidth() * sim.getWidth() + sim.getHeight() * sim.getHeight()) / 4 ));
+
         moveObstacleTo(new Point(x, y));
         rotateObstacle(rot);
     }

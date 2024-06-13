@@ -38,8 +38,6 @@
         <artifactId>maven-javadoc-plugin</artifactId>
         <version>3.6.2</version>
         <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
           <additionalparam>-Xdoclint:none</additionalparam>
         </configuration>
       </plugin>
@@ -88,5 +86,6 @@
     <maven.shade.version>3.5.3</maven.shade.version>
     <maven.compiler.source>17</maven.compiler.source>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <junit.version>5.10.0</junit.version>
   </properties>
 </project>
