@@ -7,8 +7,8 @@
 package ija.ija2023.ija_project.SimulationLib2D;
 
 public class Point{
-    protected double x;
-    protected double y;
+    public double x;
+    public double y;
     
     public Point()
     {
