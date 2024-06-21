@@ -4,9 +4,6 @@
  * contains algorithm for colliding with another Robots. It also stores
  * array of all Rectangles that Robot can collide with. Robot also contains
  * collider that is used for collision detection.
- *
- * Source line circle intersect:
- * https://www.youtube.com/watch?v=ebq7L2Wtbl4
  * 
  * @author Denis Fekete (xfeket01@fit.vutbr.cz)
  */
@@ -174,34 +171,6 @@ public class Robot extends Circle {
     }
 
     /**
-     * Checks if line intersects with this robot
-     * @param lineStart Point where line starts
-     * @param lineEnd Point where line ends
-     * @return True if line intersects with robot
-     */
-    boolean lineCircleIntersect(Point lineStart, Point lineEnd)
-    {
-
-        double lineX1 = lineEnd.x - lineStart.x;
-        double lineY1 = lineEnd.y - lineStart.y;
-
-        double lineX2 = this.x - lineStart.x;
-        double lineY2 = this.y - lineStart.y;
-
-        double lineLength = lineX1 * lineX1 + lineY1 * lineY1;
-
-        double t = Math.max(0.0, Math.min(lineLength, (lineX1 * lineX2 + lineY1 * lineY2))) / lineLength;
-
-        double closestX = lineStart.x + t * lineX1;
-        double closestY = lineStart.y + t * lineY1;
-
-        double distance = Math.sqrt((this.x - closestX) * (this.x - closestX) + (this.y - closestY) * (this.y - closestY));
-
-        return (distance <= this.getRadius());
-    }
-
-
-    /**
      * Check is this robot collides with another robot
      * @param robots Pointer to the vector of robots
      * @return True if Robot collides with other Robots
@@ -249,5 +218,37 @@ public class Robot extends Circle {
      */
     public void setDetRadius(double detRadius) {
         this.detRadius = detRadius;
+    }
+
+
+    /**
+     * Checks if line intersects with this robot
+     * @param lineStart Point where line starts
+     * @param lineEnd Point where line ends
+     * @return True if line intersects with robot
+     *
+     * Source:  https://github.com/OneLoneCoder/Javidx9/tree/master/ConsoleGameEngine/BiggerProjects/Balls
+     *          https://www.youtube.com/watch?v=ebq7L2Wtbl4
+     * Author: Javidx9 OneLoneCoder (https://github.com/OneLoneCoder)
+     */
+    boolean lineCircleIntersect(Point lineStart, Point lineEnd)
+    {
+
+        double lineX1 = lineEnd.x - lineStart.x;
+        double lineY1 = lineEnd.y - lineStart.y;
+
+        double lineX2 = this.x - lineStart.x;
+        double lineY2 = this.y - lineStart.y;
+
+        double lineLength = lineX1 * lineX1 + lineY1 * lineY1;
+
+        double t = Math.max(0.0, Math.min(lineLength, (lineX1 * lineX2 + lineY1 * lineY2))) / lineLength;
+
+        double closestX = lineStart.x + t * lineX1;
+        double closestY = lineStart.y + t * lineY1;
+
+        double distance = Math.sqrt((this.x - closestX) * (this.x - closestX) + (this.y - closestY) * (this.y - closestY));
+
+        return (distance <= this.getRadius());
     }
 }

@@ -4,9 +4,6 @@
  * definition for moving and rotating object with respect to its center.
  * Also holds implementation of collision detection between other rectangles
  *
- * Source for rectangle collision:
- * https://www.geeksforgeeks.org/check-if-two-given-line-segments-intersect/
- *
  * @author Denis Fekete (xfeket01@fit.vutbr.cz)
  */
 
@@ -213,57 +210,6 @@ public class Rect extends Circle {
     }
 
     /**
-     * Returns orientation of points
-     * @param a Start of first line
-     * @param b End of first line
-     * @param c Point that is checked
-     * @return Returns: 0 if c is collinear with a,b line, 1 if on right side, 2 if on left side
-     */
-    public int orientation(Point a, Point b, Point c)
-    {
-        double val = (b.y - a.y) * (c.x - b.x) -
-                  (b.x - a.x) * (c.y - b.y);
-
-        if (val == 0) return 0;
-
-        return (val > 0)? 1: 2;
-    }
-
-    /**
-     * Checks if two line intersect
-     * @param a Start point of first line
-     * @param b End point of first line
-     * @param c Start point of second line
-     * @param d End point of second
-     * @return True if lines intersect
-     */
-    public boolean linesIntersect(Point a, Point b, Point c, Point d)
-    {
-        int o1 = orientation(a, b, c);
-        int o2 = orientation(a, b, d);
-        int o3 = orientation(c, d, a);
-        int o4 = orientation(c, d, b);
-
-        if (o1 != o2 && o3 != o4)
-            return true;
-
-        // Special Cases
-        // p1, q1 and p2 are collinear and p2 lies on segment p1q1
-        if (o1 == 0 && onSegment(a, d, b)) return true;
-
-        // p1, q1 and q2 are collinear and q2 lies on segment p1q1
-        if (o2 == 0 && onSegment(a, d, b)) return true;
-
-        // p2, q2 and p1 are collinear and p1 lies on segment p2q2
-        if (o3 == 0 && onSegment(c, a, d)) return true;
-
-        // p2, q2 and q1 are collinear and q1 lies on segment p2q2
-        if (o4 == 0 && onSegment(c, a, d)) return true;
-
-        return false;
-    }
-
-    /**
      * Break rectangle into lines, based on edge returns Line made from 
      * rectangle points
      * edge = 0 : bottom line
@@ -373,4 +319,64 @@ public class Rect extends Circle {
                 this.getRT().getY(),
                 this.getLT().getY() };
     }
+
+
+
+    /**
+     * Returns orientation of points
+     * @param a Start of first line
+     * @param b End of first line
+     * @param c Point that is checked
+     * @return Returns: 0 if c is collinear with a,b line, 1 if on right side, 2 if on left side
+     *
+     * Source: https://www.geeksforgeeks.org/check-if-two-given-line-segments-intersect/
+     * Author: GeeksForGeeks
+     */
+    public int orientation(Point a, Point b, Point c)
+    {
+        double val = (b.y - a.y) * (c.x - b.x) -
+                (b.x - a.x) * (c.y - b.y);
+
+        if (val == 0) return 0;
+
+        return (val > 0)? 1: 2;
+    }
+
+    /**
+     * Checks if two line intersect
+     * @param a Start point of first line
+     * @param b End point of first line
+     * @param c Start point of second line
+     * @param d End point of second
+     * @return True if lines intersect
+     *
+     * Source: https://www.geeksforgeeks.org/check-if-two-given-line-segments-intersect/
+     * Author: GeeksForGeeks
+     */
+    public boolean linesIntersect(Point a, Point b, Point c, Point d)
+    {
+        int o1 = orientation(a, b, c);
+        int o2 = orientation(a, b, d);
+        int o3 = orientation(c, d, a);
+        int o4 = orientation(c, d, b);
+
+        if (o1 != o2 && o3 != o4)
+            return true;
+
+        // Special Cases
+        // p1, q1 and p2 are collinear and p2 lies on segment p1q1
+        if (o1 == 0 && onSegment(a, d, b)) return true;
+
+        // p1, q1 and q2 are collinear and q2 lies on segment p1q1
+        if (o2 == 0 && onSegment(a, d, b)) return true;
+
+        // p2, q2 and p1 are collinear and p1 lies on segment p2q2
+        if (o3 == 0 && onSegment(c, a, d)) return true;
+
+        // p2, q2 and q1 are collinear and q1 lies on segment p2q2
+        if (o4 == 0 && onSegment(c, a, d)) return true;
+
+        return false;
+    }
+
 }
