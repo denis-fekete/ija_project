@@ -1,7 +1,7 @@
 /**
  * Implementation intersection algorithms for collision detection.
  *
- * @authors Denis Fekete (xfeket01@fit.vutbr.cz), Javidx9 OneLoneCoder (https://github.com/OneLoneCoder), GeeksForGeeks (https://www.geeksforgeeks.org)
+ * @authors Denis Fekete (xfeket01@fit.vutbr.cz)
  *
  * This file and its contents are under OLC-3 License:
  *
@@ -102,6 +102,9 @@ public class Intersections {
      * @param b End of line segment
      * @param c Point that is checked
      * @return True if point lies on segment
+     *
+     * Source: https://www.geeksforgeeks.org/check-if-two-given-line-segments-intersect/
+     * Author: GeeksForGeeks
      */
     public static boolean onSegment(Point a, Point b, Point c)
     {
